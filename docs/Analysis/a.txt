@@ -1,0 +1,2 @@
+Pour GetUserRole
+SELECT * FROM users u, roles r WHERE u.EMAIL = "gawen.ackrm@eduge.ch" AND u.ROLES_CODE = r.CODE;
