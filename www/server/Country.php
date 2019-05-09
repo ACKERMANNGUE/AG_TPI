@@ -12,4 +12,10 @@ class Country
     public $isocode;
     /** @var string Le libellé du pays */
     public $label;
+
+    public function __construct($paramIsocode, $paramLabel)
+    {
+        $this->isocode = $paramIsocode;
+        $this->label = $paramLabel;
+    }
 }

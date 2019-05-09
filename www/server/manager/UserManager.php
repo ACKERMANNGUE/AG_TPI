@@ -8,19 +8,54 @@
 class UserManager
 {
     /**
-     * Fonction récupérant les informations tous les utilisateurs
+     * Fonction récupérant les informations de tous les utilisateurs
+     * @return User Les informations des utilisateurs
      */
     public static function getUsers()
-    { }
+    {
+        $sqlGetInfosUser = "SELECT EMAIL, NICKNAME, FIRSTNAME, LASTNAME, PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE FROM users";
+        $stmt = Database::prepare($sqlGetInfosUser);
+        try {
+            $arrResult = [];
+            if ($stmt->execute()) {
+                $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                if (count($res) > 0) {
+                    foreach ($res as $u) {
+                        array_push($arrResult, new User($u["EMAIL"], $u["NICKNAME"], $u["FIRSTNAME"], $u["LASTNAME"], $u["PHONE"], $u["COUNTRIES_ISOCODE"], $u["ROLES_CODE"], $u["PSWD"]));
+                    }
+                    return $arrResult;
+                }
+            }
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
     /**
      * Fonction récupérant les informations d'un utilisateur
      * @param string L'email de l'utilisateur
+     * @return User Les informations de l'utilisateur
      */
     public static function getUserByEmail($email)
-    { }
+    {
+        $sqlGetInfosUser = "SELECT EMAIL, NICKNAME, FIRSTNAME, LASTNAME, PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE FROM users WHERE EMAIL = :e";
+        $stmt = Database::prepare($sqlGetInfosUser);
+        try {
+            if ($stmt->execute(array(
+                "e" => $email
+            ))) {
+                $res = $stmt->fetch(PDO::FETCH_ASSOC);
+                if (count($res) > 0) {
+                    return new User($res["EMAIL"], $res["NICKNAME"], $res["FIRSTNAME"], $res["LASTNAME"], $res["PHONE"], $res["COUNTRIES_ISOCODE"], $res["ROLES_CODE"], $res["PSWD"]);
+                }
+            }
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
     /**
      * Fonction récupérant les informations d'un utilisateur
      * @param User Les informations de l'utilisateur
+     * @return boolean True si OK, False si problème d'insertion
      */
     public static function createUser($User)
     {
@@ -32,12 +67,33 @@ class UserManager
                 "ni" => $User->nickname,
                 "fn" => $User->firstname,
                 "ln" => $User->lastname,
-                "p" => $User->pswd,
+                "p" => sha1($User->pswd),
                 "ph" => $User->phone,
                 "ci" => $User->country,
                 "rc" => $User->role
             ))) {
                 return true;
+            }
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+    /**
+     * Fonction vérifiant l'existance d'un utilisateur
+     * @param string L'email de l'utilisateur
+     */
+    public static function UserExist($email)
+    {
+        $sqlUserExist = "SELECT * FROM users WHERE EMAIL = :e";
+        $stmt = Database::prepare($sqlUserExist);
+        try {
+            if ($stmt->execute(array(
+                "e" => $email
+            ))) {
+                $res = $stmt->fetch(PDO::FETCH_ASSOC);
+                if (count($res) > 0) {
+                    return true;
+                }
             }
         } catch (PDOException $e) {
             return false;
@@ -50,10 +106,9 @@ class UserManager
      */
     public static function Connection($email, $pwd)
     {
-
         if (UserManager::UserExist($email)) {
             $userInfo = UserManager::getUserByEmail($email);
-            $pwdUser = $userInfo[0]["PSWD"];
+            $pwdUser = $userInfo["PSWD"];
             $pwdHashed = sha1($pwd);
             if ($pwdUser === $pwdHashed) {
                 return true;

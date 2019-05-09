@@ -28,4 +28,11 @@ class Brand
     public $code;
     /** @var string Le libellé de la marque */
     public $label;
+
+
+    public function __construct($paramCode, $paramLabel)
+    {
+        $this->code = $paramCode;
+        $this->label = $paramLabel;
+    }
 }

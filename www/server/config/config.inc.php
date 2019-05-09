@@ -7,7 +7,7 @@ define ('EDB_HOST', "127.0.0.1");
 // Numéro de Port
 define ('EDB_PORT', "3306");
 // Nom de la base de donnée
-define ('EDB_DBNAME', "secondhand");
+define ('EDB_DBNAME', "schema_secondhand");
 // Nom du compte admin de la base de donnée
 define ('EDB_USER', "adminSecondHand");
 // Mot de passe du compte admin

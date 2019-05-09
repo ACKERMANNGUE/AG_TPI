@@ -15,4 +15,10 @@ class Role
     public $code;
     /** @var string Le libellé du rôle */
     public $label;
+
+    public function __construct($paramCode, $paramLabel)
+    {
+        $this->code = $paramCode;
+        $this->label = $paramLabel;
+    }
 }

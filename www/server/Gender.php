@@ -16,4 +16,10 @@ class Gender
     public $code;
     /** @var string Le libellé du type */
     public $label;
+
+    public function __construct($paramCode, $paramLabel)
+    {
+        $this->code = $paramCode;
+        $this->label = $paramLabel;
+    }
 }
