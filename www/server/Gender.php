@@ -2,7 +2,7 @@
 /**
  * @author Ackermann Gawen
  * Cette classe contient les informations
- * des différents type
+ * des différents types
  * 
  * Liste des Types :
  *            - Femme

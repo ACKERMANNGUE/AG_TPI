@@ -452,6 +452,18 @@ section {
 	transition: all 0.3s ease;
 }
 
+.myads{
+	height: 485px;
+}
+ .myads .header{
+	position: relative;
+	top: 50px;
+	-webkit-transition: all 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+	transition: all 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.myads:hover .header {
+	top: -5px;
+}
 
 .service .heading {
 	position: relative;
@@ -1102,6 +1114,11 @@ footer .social-footer li:hover a {
 	border-top: 1px solid #e8e8e5;
 	
 }
+.detailAd{
+	background-color: #252627;
+	border: 0;
+	
+}
 .frmCreateAd label{
 	color: #e8e8e5;
 }
@@ -1161,4 +1178,71 @@ footer .social-footer li:hover a {
 .grpBtnSend{
 	float: right;
 	padding-right: 25px;
+}
+
+.picture{
+	width: 525px;
+}
+#description{
+	min-width: 525px;
+	min-height: 100px;
+	max-width: 525px;
+	max-height: 400px;
+}
+#flds{
+	color: #d6d0d0;
+}
+
+.imgDetailsProduct{
+	width:425px;
+	height:600px;
+	object-fit: cover;
+}
+
+#btnBuy{
+	color: black;
+	border:0 none;
+	padding:5px 15px; 
+	width: 515px;
+	background-color: #f1c037;
+	text-align: center;
+	-webkit-transition: all 1000ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+	transition: all 1000ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+	border: 1px #f1c037 solid;
+}
+#btnBuy:hover{
+	-webkit-transition: all 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+	transition: all 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+	border: 3px #eba953 solid;
+	color: rgb(43, 43, 43);
+}
+
+#title{
+	border-bottom: #f1bd12 solid 1px;
+}
+#dtPosted{
+	padding-left: 40px;
+}
+.imgSmaller{
+	width: 125px;
+	height: 125px;
+	object-fit: cover;
+}
+.imgDetails{
+	padding:0px;
+}
+.linkButton{
+	margin-left: 2%;
+	width: 96%;
+	background-color: #ffb100;
+}
+.linkButton:hover{
+
+	background-color: #ffc53c;
+
+}
+.linkButtonStyle{
+	text-decoration: none;
+	color: white;
+	padding: 5px 15px;
 }

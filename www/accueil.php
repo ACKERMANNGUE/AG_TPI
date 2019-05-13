@@ -2,7 +2,7 @@
 include_once 'server/inc/inc.all.php';
 
 $ads = AdManager::getAds();
-
+//$pictures = PictureManager::insertPicturesForAd();
 ?>
 <!DOCTYPE html>
 <html>
@@ -41,7 +41,12 @@ $ads = AdManager::getAds();
 					<div class="col-md-4">
 						<div class="service">
 							<div class="card-img-top">
-								<img class="imgProduct" src="server/imgProduct/Nike_T-Shirt_Junior.jpg" alt="" class="icon">
+								<a href='detailsAnnonce.php?idAd=<?= $ad->id ?>'>
+									<img class="imgProduct" src='<?php
+																	$pic = PictureManager::getPicturesForAnAd($ad->id);
+																	echo $pic[0]->img;
+																	?>' alt='imgOfProduct' <?= $ad->nickname . '"' ?> class="icon">
+								</a>
 							</div>
 							<h4 class="heading text-center"><?= $ad->title ?></h4>
 							<p class="description row">

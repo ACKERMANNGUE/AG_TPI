@@ -14,7 +14,7 @@ class CountryManager
      */
     public static function getCountrysName($isocode)
     {
-        $sqlGetCountrysName = "SELECT LABEL FROM countries WHERE ISCODE = :i";
+        $sqlGetCountrysName = "SELECT LABEL FROM countries WHERE ISOCODE = :i";
         $stmt = Database::prepare($sqlGetCountrysName);
         try {
             if ($stmt->execute(array("i" => $isocode))) {

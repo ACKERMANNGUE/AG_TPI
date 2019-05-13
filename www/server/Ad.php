@@ -9,7 +9,7 @@ class Ad
 {
     /** @var int L'id de l'annonce */
     public $id;
-    /** @var string Le pseudynme de la personne détenant l'annonce */
+    /** @var string Le pseudonynme de la personne détenant l'annonce */
     public $nickname;
     /** @var string Le titre de l'annonce */
     public $title;
@@ -19,7 +19,7 @@ class Ad
     public $gender;
     /** @var int  Le code de la taille du produit */
     public $size;
-    /** @var int  La marque du produit */
+    /** @var int  Le code de la marque du produit */
     public $brand;
     /** @var int  Le code du modèle du produit */
     public $model;

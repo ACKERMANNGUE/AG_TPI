@@ -9,11 +9,11 @@ class AdManager
 {
     /**
      * Fonction récupérant les informations de toutes les annnonces
-     * @return Ad Les informations de l'annonce
+     * @return Ad[] Les informations de l'annonce
      */
     public static function getAds()
     {
-        $sqlGetInfosAds = "SELECT ID, users_NICKNAME ,TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING FROM ads";
+        $sqlGetInfosAds = "SELECT ID, users_NICKNAME ,TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING, users_NICKNAME FROM ads";
         $stmt = Database::prepare($sqlGetInfosAds);
         try {
             $arrResult = [];
@@ -37,7 +37,7 @@ class AdManager
      */
     public static function getAdById($id)
     {
-        $sqlGetInfosAd = "SELECT ID, TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING FROM ads WHERE ID = :i";
+        $sqlGetInfosAd = "SELECT ID, TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING, users_NICKNAME FROM ads WHERE ID = :i";
         $stmt = Database::prepare($sqlGetInfosAd);
         try {
             if ($stmt->execute(array("i" => $id))) {
@@ -51,7 +51,31 @@ class AdManager
         }
     }
     /**
-     * Fonction récupérant les informations d'une annnonce
+     * Fonction récupérant les annonces postées par l'utilisateur connecté 
+     * @var string Le pseudonyme de l'utilisateur
+     * @return Ad[] Les informations de toutes les annonces de l'utilisateur
+     */
+    public static function getAdsFromUser($nickname)
+    {
+        $arrResult = [];
+        $sqlGetInfosAd = "SELECT ID, TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING, users_NICKNAME FROM ads WHERE users_NICKNAME = :n";
+        $stmt = Database::prepare($sqlGetInfosAd);
+        try {
+            if ($stmt->execute(array("n" => $nickname))) {
+                $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                if (count($res) > 0) {
+                    foreach ($res as $r) {
+                        array_push($arrResult, new Ad($r["ID"],  $r["users_NICKNAME"], $r["TITLE"], $r["DESCRIPTION"], $r["GENDERS_CODE"], $r["SIZES_CODE"], $r["BRANDS_CODE"], $r["MODELS_CODE"], $r["STATES_CODE"], $r["PRICE"], $r["DATE_POSTING"]));
+                    }
+                    return $arrResult;
+                }
+            }
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+    /**
+     * Fonction créant une annonce 
      * @var Ad Les informations de l'annonce
      * @return boolean True si OK, False si problème d'insertion
      */
@@ -72,6 +96,39 @@ class AdManager
                 "p" => $Ad->price,
                 "un" => $Ad->nickname
             ))) {
+                PictureManager::insertPicturesForAd(Database::lastInsertId());
+                return true;
+            }
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+    /**
+     * Fonction modifiant une annonce 
+     * @var Ad Les informations de l'annonce
+     * @return boolean True si OK, False si problème de modification
+     */
+    public static function modifyAd($Ad)
+    {
+        $sqlModifyAd = "UPDATE ads SET TITLE = :t, DESCRIPTION = :d, GENDERS_CODE = :gc, SIZES_CODE = :sic, 
+        BRANDS_CODE = :bc, MODELS_CODE = :mc , STATES_CODE = :stc, PRICE = :p, DATE_POSTING = NOW(), users_NICKNAME = :un WHERE ID = :ia";
+        $stmt = Database::prepare($sqlModifyAd);
+        try {
+            if ($stmt->execute(array(
+                "t" => $Ad->title,
+                "d" => $Ad->description,
+                "gc" => $Ad->gender,
+                "sic" => $Ad->size,
+                "bc" => $Ad->brand,
+                "mc" => $Ad->model,
+                "stc" => $Ad->state,
+                "p" => $Ad->price,
+                "un" => $Ad->nickname,
+                "ia" => $Ad->id
+            ))) {
+                if(count($_FILES["filesToUpload"]["name"]) > 1){
+                    PictureManager::insertPicturesForAd(Database::lastInsertId());
+                }
                 return true;
             }
         } catch (PDOException $e) {

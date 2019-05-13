@@ -14,7 +14,7 @@
 
 class State
 {
-    /** @var string Le code de l'état de l'annonce */
+    /** @var int Le code de l'état de l'annonce */
     public $code;
     /** @var string Le libellé de l'état */
     public $label;

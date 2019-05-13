@@ -9,7 +9,7 @@ class UserManager
 {
     /**
      * Fonction récupérant les informations de tous les utilisateurs
-     * @return User Les informations des utilisateurs
+     * @return User[] Les informations des utilisateurs
      */
     public static function getUsers()
     {
@@ -32,16 +32,16 @@ class UserManager
     }
     /**
      * Fonction récupérant les informations d'un utilisateur
-     * @param string L'email de l'utilisateur
+     * @param string Le pseudonyme de l'utilisateur
      * @return User Les informations de l'utilisateur
      */
-    public static function getUserByEmail($email)
+    public static function getUserByNickname($nickname)
     {
-        $sqlGetInfosUser = "SELECT EMAIL, NICKNAME, FIRSTNAME, LASTNAME, PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE FROM users WHERE EMAIL = :e";
+        $sqlGetInfosUser = "SELECT EMAIL, NICKNAME, FIRSTNAME, LASTNAME, PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE FROM users WHERE NICKNAME = :n";
         $stmt = Database::prepare($sqlGetInfosUser);
         try {
             if ($stmt->execute(array(
-                "e" => $email
+                "n" => $nickname
             ))) {
                 $res = $stmt->fetch(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
@@ -53,7 +53,7 @@ class UserManager
         }
     }
     /**
-     * Fonction récupérant les informations d'un utilisateur
+     * Fonction créant un utilisateur
      * @param User Les informations de l'utilisateur
      * @return boolean True si OK, False si problème d'insertion
      */
@@ -79,8 +79,9 @@ class UserManager
         }
     }
     /**
-     * Fonction vérifiant l'existance d'un utilisateur
+     * Fonction vérifiant l'existence  d'un utilisateur
      * @param string L'email de l'utilisateur
+     * @return Boolean True si OK, False si inexistant
      */
     public static function UserExist($email)
     {
@@ -102,7 +103,8 @@ class UserManager
     /**
      * Fonction connectant un utilisateur
      * @param string L'email de l'utilisateur
-     * @param string Le mot de passe de l'utilisateur 
+     * @param string Le mot de passe de l'utilisateur
+     * @return Boolean True si OK, False si un champ est incorrect 
      */
     public static function Connection($email, $pwd)
     {

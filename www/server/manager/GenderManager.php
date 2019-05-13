@@ -2,7 +2,7 @@
 /**
  * @author Ackermann Gawen
  * Cette classe contient les fonctions
- * récupérant les données concernant une marque
+ * récupérant les données concernant le type d'un habit
  */
 
 class GenderManager

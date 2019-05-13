@@ -8,7 +8,7 @@
 
 class Country
 {
-    /** @var string Le code ISO du pays */
+    /** @var int Le code ISO du pays */
     public $isocode;
     /** @var string Le libellé du pays */
     public $label;

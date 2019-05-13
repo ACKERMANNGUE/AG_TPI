@@ -15,7 +15,7 @@
 
 class Size
 {
-    /** @var string Le code de la taille */
+    /** @var int Le code de la taille */
     public $code;
     /** @var string Le libellé de la taille */
     public $label;

@@ -24,7 +24,7 @@
 
 class Brand
 {
-    /** @var string Le code de la marque */
+    /** @var int Le code de la marque */
     public $code;
     /** @var string Le libellé de la marque */
     public $label;

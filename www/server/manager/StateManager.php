@@ -3,7 +3,7 @@
  * @author Ackermann Gawen
  * Cette classe contient les fonctions
  * récupérant les données concernant les différents états
- * possible pour une annonce
+ * possibles pour une annonce
  */
 
 class StateManager

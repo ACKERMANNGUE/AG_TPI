@@ -19,7 +19,7 @@
 
 class Model
 {
-    /** @var string Le code du modèle */
+    /** @var int Le code du modèle */
     public $code;
     /** @var string Le libellé du modèle */
     public $label;
