@@ -29,8 +29,11 @@ class User
     /** @var string Le mot de passe de la personne */
     public $pswd;
 
+      /** @var string Le status de la personne */
+      public $status;
 
-    public function __construct($paramEmail, $paramNickname, $paramFirstname, $paramLastname, $paramPhone, $paramCountry, $paramRole, $paramPswd){
+
+    public function __construct($paramEmail, $paramNickname, $paramFirstname, $paramLastname, $paramPhone, $paramCountry, $paramRole, $paramPswd, $paramStatus){
         $this->email = $paramEmail;
         $this->nickname = $paramNickname;
         $this->firstname = $paramFirstname;
@@ -39,6 +42,6 @@ class User
         $this->country = $paramCountry;
         $this->role = $paramRole;
         $this->pswd = $paramPswd;
-
+        $this->status = $paramStatus;
     }
 }

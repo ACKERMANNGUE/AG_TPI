@@ -13,7 +13,7 @@ class UserManager
      */
     public static function getUsers()
     {
-        $sqlGetInfosUser = "SELECT EMAIL, NICKNAME, FIRSTNAME, LASTNAME, PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE FROM users";
+        $sqlGetInfosUser = "SELECT EMAIL, NICKNAME, FIRSTNAME, LASTNAME, PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE, status_CODE FROM users";
         $stmt = Database::prepare($sqlGetInfosUser);
         try {
             $arrResult = [];
@@ -21,7 +21,7 @@ class UserManager
                 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
                     foreach ($res as $u) {
-                        array_push($arrResult, new User($u["EMAIL"], $u["NICKNAME"], $u["FIRSTNAME"], $u["LASTNAME"], $u["PHONE"], $u["COUNTRIES_ISOCODE"], $u["ROLES_CODE"], $u["PSWD"]));
+                        array_push($arrResult, new User($u["EMAIL"], $u["NICKNAME"], $u["FIRSTNAME"], $u["LASTNAME"], $u["PHONE"], $u["COUNTRIES_ISOCODE"], $u["ROLES_CODE"], $u["PSWD"], $u["status_CODE"]));
                     }
                     return $arrResult;
                 }
@@ -37,7 +37,7 @@ class UserManager
      */
     public static function getUserByNickname($nickname)
     {
-        $sqlGetInfosUser = "SELECT EMAIL, NICKNAME, FIRSTNAME, LASTNAME, PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE FROM users WHERE NICKNAME = :n";
+        $sqlGetInfosUser = "SELECT EMAIL, NICKNAME, FIRSTNAME, LASTNAME, PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE, status_CODE FROM users WHERE NICKNAME = :n";
         $stmt = Database::prepare($sqlGetInfosUser);
         try {
             if ($stmt->execute(array(
@@ -45,7 +45,29 @@ class UserManager
             ))) {
                 $res = $stmt->fetch(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
-                    return new User($res["EMAIL"], $res["NICKNAME"], $res["FIRSTNAME"], $res["LASTNAME"], $res["PHONE"], $res["COUNTRIES_ISOCODE"], $res["ROLES_CODE"], $res["PSWD"]);
+                    return new User($res["EMAIL"], $res["NICKNAME"], $res["FIRSTNAME"], $res["LASTNAME"], $res["PHONE"], $res["COUNTRIES_ISOCODE"], $res["ROLES_CODE"], $res["PSWD"], $res["status_CODE"]);
+                }
+            }
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+    /**
+     * Fonction récupérant les informations d'un utilisateur
+     * @param string Le pseudonyme de l'utilisateur
+     * @return User Les informations de l'utilisateur
+     */
+    public static function getUserByEmail($email)
+    {
+        $sqlGetInfosUser = "SELECT EMAIL, NICKNAME, FIRSTNAME, LASTNAME, PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE, status_CODE FROM users WHERE EMAIL = :e";
+        $stmt = Database::prepare($sqlGetInfosUser);
+        try {
+            if ($stmt->execute(array(
+                "e" => $email
+            ))) {
+                $res = $stmt->fetch(PDO::FETCH_ASSOC);
+                if (count($res) > 0) {
+                    return new User($res["EMAIL"], $res["NICKNAME"], $res["FIRSTNAME"], $res["LASTNAME"], $res["PHONE"], $res["COUNTRIES_ISOCODE"], $res["ROLES_CODE"], $res["PSWD"], $res["status_CODE"]);
                 }
             }
         } catch (PDOException $e) {
@@ -59,7 +81,7 @@ class UserManager
      */
     public static function createUser($User)
     {
-        $sqlCreateUser = "INSERT INTO users (EMAIL, NICKNAME, FIRSTNAME, LASTNAME,PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE) VALUES (:e,:ni, :fn, :ln, :p, :ph, :ci, :rc)";
+        $sqlCreateUser = "INSERT INTO users (EMAIL, NICKNAME, FIRSTNAME, LASTNAME,PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE, status_CODE) VALUES (:e,:ni, :fn, :ln, :p, :ph, :ci, :rc, :sc)";
         $stmt = Database::prepare($sqlCreateUser);
         try {
             if ($stmt->execute(array(
@@ -70,7 +92,8 @@ class UserManager
                 "p" => sha1($User->pswd),
                 "ph" => $User->phone,
                 "ci" => $User->country,
-                "rc" => $User->role
+                "rc" => $User->role,
+                "sc" => $User->status
             ))) {
                 return true;
             }
@@ -78,6 +101,28 @@ class UserManager
             return false;
         }
     }
+    /**
+     * Fonction modifiant le status d'un utilisateur
+     * @var string Le pseudonyme de l'utilisateur
+     * @var int L'id du status
+     * @return boolean True si OK, False si problème de modification
+     */
+    public static function modifyUsersStatus($nickname, $idStatus)
+    {
+        $sqlModifyUsersStatus = "UPDATE users SET status_CODE = :sc WHERE NICKNAME = :n";
+        $stmt = Database::prepare($sqlModifyUsersStatus);
+        try {
+            if ($stmt->execute(array(
+                "sc" => $idStatus,
+                "n" => $nickname
+            ))) {
+                return true;
+            }
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
     /**
      * Fonction vérifiant l'existence  d'un utilisateur
      * @param string L'email de l'utilisateur
@@ -110,7 +155,7 @@ class UserManager
     {
         if (UserManager::UserExist($email)) {
             $userInfo = UserManager::getUserByEmail($email);
-            $pwdUser = $userInfo["PSWD"];
+            $pwdUser = $userInfo->pswd;
             $pwdHashed = sha1($pwd);
             if ($pwdUser === $pwdHashed) {
                 return true;

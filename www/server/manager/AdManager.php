@@ -75,6 +75,26 @@ class AdManager
         }
     }
     /**
+     * Fonction récupérant le pseudonyme du propriétaire de l'annonce
+     * @var int L'id de l'annonce
+     * @return string Le pseudonyme du propriétaire de l'annonce
+     */
+    public static function getAdsUsersNickname($idAd)
+    {
+        $sqlGetInfosAd = "SELECT users_NICKNAME FROM ads WHERE ID = :i";
+        $stmt = Database::prepare($sqlGetInfosAd);
+        try {
+            if ($stmt->execute(array("i" => $idAd))) {
+                $res = $stmt->fetch(PDO::FETCH_ASSOC);
+                if (count($res) > 0) {
+                    return $res["users_NICKNAME"];
+                }
+            }
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+    /**
      * Fonction créant une annonce 
      * @var Ad Les informations de l'annonce
      * @return boolean True si OK, False si problème d'insertion
@@ -96,8 +116,9 @@ class AdManager
                 "p" => $Ad->price,
                 "un" => $Ad->nickname
             ))) {
-                PictureManager::insertPicturesForAd(Database::lastInsertId());
-                return true;
+                if (PictureManager::insertPicturesForAd(Database::lastInsertId())) {
+                    return true;
+                }
             }
         } catch (PDOException $e) {
             return false;
@@ -126,9 +147,29 @@ class AdManager
                 "un" => $Ad->nickname,
                 "ia" => $Ad->id
             ))) {
-                if(count($_FILES["filesToUpload"]["name"]) > 1){
-                    PictureManager::insertPicturesForAd(Database::lastInsertId());
+                if (count($_FILES["filesToUpload"]["name"]) > 1) {
+                    PictureManager::insertPicturesForAd($Ad->id);
                 }
+                return true;
+            }
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+    /**
+     * Fonction modifiant l'état d'une annonce 
+     * @var Ad Les informations de l'annonce
+     * @return boolean True si OK, False si problème de modification
+     */
+    public static function modifyAdsState($Ad)
+    {
+        $sqlModifyAdsState = "UPDATE ads SET STATES_CODE = :stc WHERE ID = :ia";
+        $stmt = Database::prepare($sqlModifyAdsState);
+        try {
+            if ($stmt->execute(array(
+                "stc" => intval($Ad->state),
+                "ia" => intval($Ad->id)
+            ))) {
                 return true;
             }
         } catch (PDOException $e) {

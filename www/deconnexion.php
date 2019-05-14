@@ -1,5 +1,5 @@
 <?php
-session_start();
+include_once 'server/inc/inc.all.php';
 
 // Détruit toutes les variables de session
 $_SESSION = array();

@@ -1246,3 +1246,44 @@ footer .social-footer li:hover a {
 	color: white;
 	padding: 5px 15px;
 }
+
+.frm{
+	color: white;
+	background-color: #252627;
+	border: 0;
+	border-top: 1px solid #e8e8e5;
+}
+
+.servicesGestion{
+	width: 100%;
+	height: 550px;
+    margin: 20px 0;
+	text-align: center;
+	border: 1px solid #ddd;
+	-webkit-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+.btnGestion{
+	margin-top: 35px;
+	width: 96%;
+	padding: 5px 15px;
+	font-weight: 600;
+	line-height: 10px;
+}
+
+.displaySelect{
+	z-index: 1;
+	position: absolute;
+	margin-left: 105px;
+	width: 250px;
+    background-color: #ffb100;
+    color: white;
+}
+option:checked:hover, .displaySelect:focus option:checked:hover {
+	background-color: #ffc53c;
+	box-shadow: 0 0 10px 100px #ffc53c inset;
+}
+.displaySelect:focus > option:checked { 
+    background: #ffc446 !important;
+}

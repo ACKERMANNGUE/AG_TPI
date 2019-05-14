@@ -62,3 +62,9 @@ INSERT INTO `schema_secondhand`.`states` (`CODE`, `LABEL`) VALUES ('2', 'Vendue'
 INSERT INTO `schema_secondhand`.`states` (`CODE`, `LABEL`) VALUES ('3', 'En cours de vente');
 INSERT INTO `schema_secondhand`.`states` (`CODE`, `LABEL`) VALUES ('4', 'Supprimée');
 INSERT INTO `schema_secondhand`.`states` (`CODE`, `LABEL`) VALUES ('5', 'Suspendue');
+
+/*
+Données pour la table des différents status possible pour un utilisateur
+*/
+INSERT INTO `schema_secondhand`.`status` (`CODE`, `LABEL`) VALUES ('1', 'Validé');
+INSERT INTO `schema_secondhand`.`status` (`CODE`, `LABEL`) VALUES ('2', 'Bloqué');

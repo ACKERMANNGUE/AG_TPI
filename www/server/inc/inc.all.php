@@ -2,8 +2,11 @@
 /* Pour avoir accès aux sessions quasiment partout */
 session_start();
 
-/* Pour éviter de se reconnecter tout le temps TODO : Enlever quand inutile */ 
-$_SESSION["NICKNAME"] = "ACKERMANNGUE";
+
+
+
+
+include_once __DIR__. '/../Constants/constants.php';
 
 /* Connexion à la Base de données */
 
@@ -21,6 +24,7 @@ include_once __DIR__. '/../Size.php';
 include_once __DIR__. '/../State.php';
 include_once __DIR__. '/../User.php';
 include_once __DIR__. '/../Picture.php';
+include_once __DIR__. '/../Status.php';
 
 
 /* Managers des classes utilisées */
@@ -33,7 +37,7 @@ include_once __DIR__. '/../manager/ModelManager.php';
 include_once __DIR__. '/../manager/SizeManager.php';
 include_once __DIR__. '/../manager/StateManager.php';
 include_once __DIR__. '/../manager/PictureManager.php';
-
+include_once __DIR__. '/../manager/StatusManager.php';
 
 
 ?>

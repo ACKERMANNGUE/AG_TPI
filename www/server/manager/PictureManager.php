@@ -15,7 +15,7 @@ class PictureManager
      */
     public static function insertPicturesForAd($id)
     {
-        
+
         $sqlClearPictures = "DELETE FROM pictures WHERE ADS_ID = :ai";
         $stmt = Database::prepare($sqlClearPictures);
         try {
@@ -26,7 +26,7 @@ class PictureManager
             return false;
         }
 
-        $cptINDEX = 0;
+        $cptINDEX = 1;
         for ($i = 0; $i < count($_FILES['filesToUpload']['name']); $i++) {
             if (!isset($_FILES['filesToUpload']['name'][$i]) || !is_uploaded_file($_FILES['filesToUpload']['tmp_name'][$i])) {
                 echo ('Problème de transfert');
@@ -46,7 +46,7 @@ class PictureManager
 
             $sqlInsertPictures = "INSERT INTO pictures (ADS_ID, INDEX_IMG, IMAGE) VALUES (:ai,:ix, :img)";
             $stmt = Database::prepare($sqlInsertPictures);
-            $cptINDEX++;
+
             try {
                 if ($stmt->execute(array(
                     "ai" => intval($id),
@@ -60,6 +60,7 @@ class PictureManager
             } catch (PDOException $e) {
                 return false;
             }
+            $cptINDEX++;
         }
     }
     /**
