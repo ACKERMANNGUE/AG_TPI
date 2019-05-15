@@ -1,7 +1,7 @@
 <?php
 include_once 'server/inc/inc.all.php';
 
-if($_SESSION["ROLE"] != ROLE_ADMIN){
+if(SessionManager::GetRole() != ROLE_ADMIN){
     header("Location:accueil.php");
 }
 

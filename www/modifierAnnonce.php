@@ -1,7 +1,7 @@
 <?php
 include_once 'server/inc/inc.all.php';
 
-if(!isset($_SESSION["ROLE"])){
+if (SessionManager::GetRole() === false) {
     header("Location:accueil.php");
 }
 
@@ -17,46 +17,26 @@ $models = ModelManager::getAllModels();
 $sizes = SizeManager::getAllSizes();
 $states = StateManager::getAllStates();
 
-if (isset($_POST["btnSend"])) {
-    $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_STRING);
-    $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_STRING);
-    $brand = $_POST["brand"];
-    $model = $_POST["model"];
-    $size = $_POST["size"];
-    $type = $_POST["type"];
-    $state = $_POST["state"];
-    $price = filter_input(INPUT_POST, 'price', FILTER_SANITIZE_NUMBER_FLOAT);
-    /* */
-    if (count($title) > 0 && count($description) > 0 && count($brand) > 0 && count($model) > 0 && count($size) > 0 && count($type) > 0) {
-        $Ad = new Ad($idAd, $_SESSION["NICKNAME"], $title, $description, $type, $size, $brand, $model, $state, $price, null);
-        if (AdManager::modifyAd($Ad)) {
-            echo "Annonce Modifiée";
-            header("Location:mesAnnonces.php");
-        }
-    }
-}
-
 ?>
 <!DOCTYPE html>
 <html>
 
 <head>
-<title>Modifier une annonce</title>
+    <title>Modifier une annonce</title>
     <?php include_once "server/inc/head.inc.php"; ?>
 </head>
 
 <body>
-<?php 
-	include_once "server/inc/nav.inc.php";
-	?>
+    <?php
+    include_once "server/inc/nav.inc.php";
+    ?>
     <section id="services" class="section section-padded">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="createAd">
-
                         <h4 class="heading text-center">Modifier une annonce</h4>
-                        <form class="well form-horizontal frmCreateAd" action="#" method="POST" enctype="multipart/form-data">
+                        <form class="well form-horizontal frmCreateAd" method="POST" enctype="multipart/form-data">
                             <fieldset>
                                 <div class="form-group">
                                     <label class="col-xs-6 control-label lblForm">Titre</label>
@@ -74,7 +54,7 @@ if (isset($_POST["btnSend"])) {
                                         <label class="col-xs-6 control-label lblForm">Marque</label>
                                         <div class="col-md-6 inputGroupContainer">
                                             <div class="input-group inputForm">
-                                                <select class="form-control" name="brand">
+                                                <select class="form-control" name="brand" id="brand">
                                                     <?php foreach ($brands as $b) {
                                                         if ($b->code === $ad->brand) {
                                                             echo '<option value="' . $b->code . '" selected="selected">' . $b->label . '</option>';
@@ -93,7 +73,7 @@ if (isset($_POST["btnSend"])) {
                                         <label class="col-xs-6 control-label lblForm">Modèle</label>
                                         <div class="col-md-6 inputGroupContainer">
                                             <div class="input-group inputForm">
-                                                <select class="form-control" name="model">
+                                                <select class="form-control" name="model" id="model">
                                                     <?php foreach ($models as $m) {
                                                         if ($m->code === $ad->model) {
                                                             echo '<option value="' . $m->code . '" selected="selected">' . $m->label . '</option>';
@@ -112,7 +92,7 @@ if (isset($_POST["btnSend"])) {
                                         <label class="col-xs-6 control-label lblForm">Taille</label>
                                         <div class="col-md-6 inputGroupContainer">
                                             <div class="input-group inputForm">
-                                                <select class="form-control" name="size">
+                                                <select class="form-control" name="size" id="size">
                                                     <?php foreach ($sizes as $s) {
                                                         if ($s->code === $ad->size) {
                                                             echo '<option value="' . $s->code . '" selected="selected">' . $s->label . '</option>';
@@ -131,7 +111,7 @@ if (isset($_POST["btnSend"])) {
                                         <label class="col-xs-6 control-label lblForm">Type</label>
                                         <div class="col-md-6 inputGroupContainer">
                                             <div class="input-group inputForm">
-                                                <select class="form-control" name="type">
+                                                <select class="form-control" name="type" id="type">
                                                     <?php foreach ($genders as $g) {
                                                         if ($g->code === $ad->gender) {
                                                             echo '<option value="' . $g->code . '" selected="selected">' . $g->label . '</option>';
@@ -150,7 +130,7 @@ if (isset($_POST["btnSend"])) {
                                         <label class="col-xs-6 control-label lblForm">État</label>
                                         <div class="col-md-6 inputGroupContainer">
                                             <div class="input-group inputForm">
-                                                <select class="form-control" name="state">
+                                                <select class="form-control" name="state" id="state">
                                                     <?php foreach ($states as $s) {
                                                         if ($s->code === $ad->state) {
                                                             echo '<option value="' . $s->code . '" selected="selected">' . $s->label . '</option>';
@@ -176,41 +156,23 @@ if (isset($_POST["btnSend"])) {
                                     <div class="form-group">
                                         <label class="col-xs-6 control-label lblForm">Photo (Min. 1)</label>
                                         <div class="col-md-6 inputGroupContainer">
-                                            <div class="col-sm"><input type="file" class="form-control picture" name="filesToUpload[]" multiple accept="image/*" /></div>
+                                            <div class="col-sm"><input type="file" id="fileSelect" class="form-control picture" name="filesToUpload[]" multiple accept="image/*" /></div>
                                             <div class="col-md-8 imgDetails">
                                                 <p class="col-md text-danger text-justify">Attention : Si vous chargez de nouvelles images,
-                                                     celles-ci vont écraser celles présentent actuellement.</p>
-                                                <div class="col-md-4">
-                                                    <?php if (count($pictures) > 0) {
-                                                        echo '<img class="imgSmaller" src="' . $pictures[0]->img . '" alt="" />';
-                                                    } ?>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <?php if (count($pictures) > 1) {
-                                                        echo '<img class="imgSmaller" src=' . $pictures[1]->img . ' alt="" />';
-                                                    } ?>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <?php if (count($pictures) > 2) {
-                                                        echo '<img class="imgSmaller" src=' . $pictures[2]->img . ' alt="" />';
-                                                    } ?>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <?php if (count($pictures) > 3) {
-                                                        echo '<img class="imgSmaller" src=' . $pictures[3]->img . ' alt="" />';
-                                                    } ?>
-
+                                                    celles-ci vont écraser celles présentent actuellement.</p>
+                                                <div id="imagePreview">
                                                 </div>
                                             </div>
-
                                         </div>
-                                    </div>
 
-                                    <div class="form-group grpBtnSend">
-                                        <div class="col-md-6 inputGroupContainer">
-                                            <div class="input-group inputForm"><input id="price" name="btnSend" class="form-control" required="true" value="Modifier mon annonce !" type="submit"></div>
-                                        </div>
                                     </div>
+                                </div>
+
+                                <div class="form-group grpBtnSend">
+                                    <div class="col-md-6 inputGroupContainer">
+                                        <div class="input-group inputForm"><button type="button" id="btnSend" class="btn btn-yellow">Modifier mon annonce !</button></div>
+                                    </div>
+                                </div>
                             </fieldset>
                         </form>
                     </div>
@@ -220,5 +182,157 @@ if (isset($_POST["btnSend"])) {
         </div>
     </section>
 </body>
+<script type="text/javascript">
+    $(document).ready(function() {
+        displayImagesOnLoad();
+        $("#btnSend").click(function() {
+            var idAd = <?= $idAd ?>;
+            var title = $("#title").val();
+            var description = $("#description").val();
+            var brand = 0;
+            $("select.brand").change(function() {
+                brand = $(this).children("option:selected").val();
+            });
+            if (brand === 0) {
+                brand = $("#brand").val();
+            }
+            var model = 0;
+            $("select.model").change(function() {
+                model = $(this).children("option:selected").val();
+            });
+            if (model === 0) {
+                model = $("#model").val();
+            }
+            var gender = 0;
+            $("select.type").change(function() {
+                gender = $(this).children("option:selected").val();
+            });
+            if (gender === 0) {
+                gender = $("#type").val();
+            }
+            var state = 0;
+            $("select.state").change(function() {
+                state = $(this).children("option:selected").val();
+            });
+            if (state === 0) {
+                state = $("#state").val();
+            }
+            var size = 0;
+            $("select.size").change(function() {
+                size = $(this).children("option:selected").val();
+            });
+            if (size === 0) {
+                size = $("#size").val();
+            }
+
+            var price = $("#price").val();
+            var child = $("#imagePreview").children();
+            var arrFiles = [];
+            for (var i = 0; i < child.length; i++) {
+                var divWithImage = child[i];
+                var imgBase64 = divWithImage.firstElementChild.currentSrc;
+                arrFiles.push(imgBase64);
+            }
+            if (idAd != null && title != null && description != null && brand != null && model != null && gender != null && state != null && price != null && size != null && arrFiles != null) {
+                modifyAd(parseInt(idAd), title, description, parseInt(brand), parseInt(model), parseInt(gender), parseInt(state), price, parseInt(size), arrFiles);
+            }
+        }); //#end btn click
+
+
+
+        // On capture le changement de sélection d'images
+        $("#fileSelect").change(function() {
+            // On parcoure les fichers
+            var file = $(this)[0].files[0];
+            var reader = new FileReader();
+            reader.addEventListener("load", function() {
+                // Ajouter un section pour l'image
+                var el = $("#imagePreview");
+                var div = $('<div class="col-md-4">');
+                el.append(div);
+                var img = $('<img class="imgSmaller" />');
+                img.attr("src", reader.result);
+                div.append(img);
+
+            }, false);
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }); //#end select change
+
+    }); //#end document ready
+
+    /**
+     * Modifie l'état d'une annonce
+     * @var int L'id de l'annonce
+     * @var string Le titre de l'annonce
+     * @var string La description de l'annonce
+     * @var int le code de la marque séléctionnée
+     * @var int le code du modèle séléctionné
+     * @var int le code du type séléctionné
+     * @var int le code de l'état de l'annonce
+     * @var int le code de la taille
+     * @var int Tableau de string, ce sont les images encodées en base64
+     * @returns string Message de confirmation de modification
+     */
+    function modifyAd(idAd, title, description, brand, model, gender, state, price, size, pictures) {
+
+        $.ajax({
+            type: 'POST',
+            url: 'server/ajax/ajaxModifyAd.php',
+            dataType: 'json',
+            data: {
+                "idAd": idAd,
+                "title": title,
+                "description": description,
+                "brand": brand,
+                "model": model,
+                "size": size,
+                "gender": gender,
+                "state": state,
+                "price": price,
+                "pictures": pictures
+            },
+            success: function(returnedData) {
+                var res = returnedData;
+
+            },
+            error: function(xhr, tst, err) {
+                console.log(err);
+            }
+        });
+    }
+
+    function displayImagesOnLoad() {
+        var i;
+        $.ajax({
+            type: 'POST',
+            url: 'server/ajax/ajaxGetPicturesForAd.php',
+            dataType: 'json',
+            data: {
+                "idAd": <?= $idAd ?>
+            },
+            success: function(returnedData) {
+                var r = returnedData.ImageInBase64;
+                if (r != null) {
+                    for (i = 0; i < r.length; i++) {
+                        var el = $("#imagePreview");
+                        var div = $('<div class="col-md-4">');
+                        el.append(div);
+                        var imgEl = $('<img class="imgSmaller" />');
+                        imgEl.attr("src", r[i].img);
+                        div.append(imgEl);
+                    }
+                }
+            },
+            error: function(xhr, tst, err) {
+                console.log(err);
+            }
+        });
+
+
+
+    }
+</script>
 
 </html>

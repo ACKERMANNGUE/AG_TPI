@@ -1,11 +1,11 @@
 <?php
 include_once 'server/inc/inc.all.php';
 
-if($_SESSION["ROLE"] != ROLE_USER){
+if(SessionManager::GetRole() != ROLE_USER){
     header("Location:accueil.php");
 }
 
-$ads = AdManager::getAdsFromUser($_SESSION["NICKNAME"]);
+$ads = AdManager::getAdsFromUser(SessionManager::GetNickname());
 if($ads == null){
     $ads = [];
 }

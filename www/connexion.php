@@ -9,8 +9,8 @@ if (isset($_POST["btnSend"])) {
     /* Disparaîtra, en attendant la connexion en AJAX */
     if (UserManager::Connection($email, $pswd)) {
         $user = UserManager::getUserByEmail($email);
-        $_SESSION["NICKNAME"] = $user->nickname;
-        $_SESSION["ROLE"] = $user->role;
+        SessionManager::SetNickname($user->nickname);
+        SessionManager::SetRole(intval($user->role));
             header("Location:accueil.php");
     } else {
 

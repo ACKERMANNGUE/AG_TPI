@@ -23,7 +23,7 @@ if(isset($_POST["btnSend"])){
     $price = filter_input(INPUT_POST, 'price', FILTER_SANITIZE_NUMBER_FLOAT);
 
     if(count($title) > 0 && count($description) > 0 &&count($brand) > 0 &&count($model) > 0 &&count($size) > 0 &&count($type) > 0){
-        $Ad = new Ad(null, $_SESSION["NICKNAME"] ,$title,$description,$type, $size, $brand, $model, $state, $price, null);
+        $Ad = new Ad(null, $_SESSION["NICKNAME"] ,$title,$description,$type, $size, $brand, $model, $state, abs($price), null);
         if(AdManager::createAd($Ad)){
             echo "Annonce créée";
             header("Location:accueil.php");

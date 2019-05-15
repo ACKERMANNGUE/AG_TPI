@@ -27,6 +27,7 @@ include_once __DIR__. '/../Picture.php';
 include_once __DIR__. '/../Status.php';
 
 
+
 /* Managers des classes utilisées */
 include_once __DIR__. '/../manager/UserManager.php';
 include_once __DIR__. '/../manager/AdManager.php';
@@ -38,6 +39,6 @@ include_once __DIR__. '/../manager/SizeManager.php';
 include_once __DIR__. '/../manager/StateManager.php';
 include_once __DIR__. '/../manager/PictureManager.php';
 include_once __DIR__. '/../manager/StatusManager.php';
-
+include_once __DIR__. '/../manager/SessionManager.php';
 
 ?>

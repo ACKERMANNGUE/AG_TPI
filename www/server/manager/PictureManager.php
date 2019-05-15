@@ -13,7 +13,7 @@ class PictureManager
      * @var int L'ID de l'annonce
      * @return boolean True si OK, False si problème d'insertion
      */
-    public static function insertPicturesForAd($id)
+    public static function insertPicturesForAd($id, $imgBase64)
     {
 
         $sqlClearPictures = "DELETE FROM pictures WHERE ADS_ID = :ai";
@@ -27,33 +27,18 @@ class PictureManager
         }
 
         $cptINDEX = 1;
-        for ($i = 0; $i < count($_FILES['filesToUpload']['name']); $i++) {
-            if (!isset($_FILES['filesToUpload']['name'][$i]) || !is_uploaded_file($_FILES['filesToUpload']['tmp_name'][$i])) {
-                echo ('Problème de transfert');
-                exit;
-            }
-            /* Code créant à partir des infos du fichier une image en base64 : Code fournis par M. Aigroz */
-            // Récupérer le contenu du fichier tmp
-            $data = file_get_contents($_FILES['filesToUpload']['tmp_name'][$i]);
-            // Récupérer le type MIME du fichier à l’aide de la classe finfo
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mime = finfo_file($finfo, $_FILES['filesToUpload']['tmp_name'][$i]);
-            // On créé la chaîne de caractères qui permettra de l’afficher directement dans l’attribut src d’un tag <img>
-            // On utilise la fonction base64_encode pour transformer le contenu $data en base64
-            $src = 'data:' . $mime . ';base64,' . base64_encode($data);
-
-
-
+        for ($i = 0; $i < count($imgBase64); $i++) {
             $sqlInsertPictures = "INSERT INTO pictures (ADS_ID, INDEX_IMG, IMAGE) VALUES (:ai,:ix, :img)";
             $stmt = Database::prepare($sqlInsertPictures);
-
+            $src = $imgBase64[$i];
             try {
                 if ($stmt->execute(array(
                     "ai" => intval($id),
                     "ix" => $cptINDEX,
                     "img" => $src
                 ))) {
-                    if (count($_FILES['filesToUpload']['name']) == $i) {
+                    /* Rajout d'un car l'index est utilisé pour parcourir le tableau */ 
+                    if (count($imgBase64) === $i + 1) {
                         return true;
                     }
                 }
@@ -63,6 +48,7 @@ class PictureManager
             $cptINDEX++;
         }
     }
+
     /**
      * Fonction récupérant les images d'une annonce
      * @var int L'id de l'annonce

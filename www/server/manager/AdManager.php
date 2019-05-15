@@ -116,7 +116,7 @@ class AdManager
                 "p" => $Ad->price,
                 "un" => $Ad->nickname
             ))) {
-                if (PictureManager::insertPicturesForAd(Database::lastInsertId())) {
+                if (PictureManager::insertPicturesForAd(Database::lastInsertId(), null)) {
                     return true;
                 }
             }
@@ -129,11 +129,13 @@ class AdManager
      * @var Ad Les informations de l'annonce
      * @return boolean True si OK, False si problème de modification
      */
-    public static function modifyAd($Ad)
+    public static function modifyAd($Ad, $pictures = null)
     {
         $sqlModifyAd = "UPDATE ads SET TITLE = :t, DESCRIPTION = :d, GENDERS_CODE = :gc, SIZES_CODE = :sic, 
         BRANDS_CODE = :bc, MODELS_CODE = :mc , STATES_CODE = :stc, PRICE = :p, DATE_POSTING = NOW(), users_NICKNAME = :un WHERE ID = :ia";
         $stmt = Database::prepare($sqlModifyAd);
+        // On démarre la transaction au cas où une des tables ne pourra être mise à jour
+        Database::beginTransaction();
         try {
             if ($stmt->execute(array(
                 "t" => $Ad->title,
@@ -147,14 +149,23 @@ class AdManager
                 "un" => $Ad->nickname,
                 "ia" => $Ad->id
             ))) {
-                if (count($_FILES["filesToUpload"]["name"]) > 1) {
-                    PictureManager::insertPicturesForAd($Ad->id);
+                if ($pictures != null) {
+                    if (PictureManager::insertPicturesForAd($Ad->id, $pictures) == false) {
+                            // Un problème, on roll back les changements
+                            Database::rollBack();
+                            return false;
+                        }
                 }
+                // C'est tout bon, on 
+                Database::commit();
                 return true;
             }
         } catch (PDOException $e) {
-            return false;
+            // Un problème, on roll back les changements
+            Database::rollBack();
         }
+        // Si on arrive ici, on a rencontré un problème
+        return false;
     }
     /**
      * Fonction modifiant l'état d'une annonce 

@@ -53,7 +53,7 @@ $user = UserManager::getUserByNickname($ad->nickname);
                                             <h4>Pays : <?= CountryManager::getCountrysName($user->country) ?></h4>
                                         </div>
                                         <div class="col-xs-6 lblForm text-right">
-                                            <h4><?= GenderManager::getGenderName($ad->price) ?>CHF</h4>
+                                            <h4><?= $ad->price ?> CHF</h4>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12 lblForm">
