@@ -13,7 +13,7 @@ class AdManager
      */
     public static function getAds()
     {
-        $sqlGetInfosAds = "SELECT ID, users_NICKNAME ,TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING, users_NICKNAME FROM ads";
+        $sqlGetInfosAds = "SELECT ID, users_NICKNAME ,TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING, users_NICKNAME FROM ads ORDER BY DATE_POSTING DESC";
         $stmt = Database::prepare($sqlGetInfosAds);
         try {
             $arrResult = [];
@@ -37,7 +37,7 @@ class AdManager
      */
     public static function getAdById($id)
     {
-        $sqlGetInfosAd = "SELECT ID, TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING, users_NICKNAME FROM ads WHERE ID = :i";
+        $sqlGetInfosAd = "SELECT ID, TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING, users_NICKNAME FROM ads WHERE ID = :i ORDER BY DATE_POSTING DESC";
         $stmt = Database::prepare($sqlGetInfosAd);
         try {
             if ($stmt->execute(array("i" => $id))) {
@@ -58,7 +58,7 @@ class AdManager
     public static function getAdsFromUser($nickname)
     {
         $arrResult = [];
-        $sqlGetInfosAd = "SELECT ID, TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING, users_NICKNAME FROM ads WHERE users_NICKNAME = :n";
+        $sqlGetInfosAd = "SELECT ID, TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING, users_NICKNAME FROM ads WHERE users_NICKNAME = :n ORDER BY DATE_POSTING DESC";
         $stmt = Database::prepare($sqlGetInfosAd);
         try {
             if ($stmt->execute(array("n" => $nickname))) {
@@ -95,11 +95,112 @@ class AdManager
         }
     }
     /**
+     * Fonction récupérant les annonces selon le filtre appliqué
+     * @var int Le prix minimum du produit
+     * @var int Le prix maximum du produit
+     * @var int La marque du produit
+     * @var int Le modèle du produit
+     * @var int La taille du produit
+     * @var int Le type du produit
+     * @var int L'état de l'annonce
+     * @return string Le pseudonyme du propriétaire de l'annonce
+     */
+    public static function getAdsWithFilter($minPrice = null, $maxPrice = null, $brand = null, $model = null, $size = null, $type = null, $state = null)
+    {
+        $arrVariables = [];
+        $sqlGetInfosAd = "SELECT ID, TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING, users_NICKNAME FROM ads";
+        if ($minPrice != null && $maxPrice != null) {
+            if (count($arrVariables) == 0) {
+                $sqlGetInfosAd .= " WHERE PRICE BETWEEN :pMin AND :pMax";
+            } else {
+                $sqlGetInfosAd .= " AND PRICE BETWEEN :pMin AND :pMax";
+            }
+            $arrVariables['pMin'] = $minPrice;
+            $arrVariables['pMax'] = $maxPrice;
+        } else {
+            if ($minPrice != null) {
+                if (count($arrVariables) == 0) {
+                    $sqlGetInfosAd .= " WHERE PRICE >= :pMin";
+                } else {
+                    $sqlGetInfosAd .= " AND PRICE >= :pMin";
+                }
+                $arrVariables['pMin'] = $minPrice;
+            }
+            if ($maxPrice != null) {
+                if (count($arrVariables) == 0) {
+                    $sqlGetInfosAd .= " WHERE PRICE <= :pMax";
+                } else {
+                    $sqlGetInfosAd .= " AND PRICE <= :pMax";
+                }
+                $arrVariables['pMax'] = $maxPrice;
+            }
+        }
+        if ($brand != null) {
+            if (count($arrVariables) == 0) {
+                $sqlGetInfosAd .= " WHERE BRANDS_CODE = :bc";
+            } else {
+                $sqlGetInfosAd .= " AND BRANDS_CODE = :bc";
+            }
+            $arrVariables['bc'] = $brand;
+        }
+        if ($model != null) {
+            if (count($arrVariables) == 0) {
+                $sqlGetInfosAd .= " WHERE MODELS_CODE = :mc";
+            } else {
+                $sqlGetInfosAd .= " AND MODELS_CODE = :mc";
+            }
+            $arrVariables['mc'] = $model;
+        }
+        if ($size != null) {
+            if (count($arrVariables) == 0) {
+                $sqlGetInfosAd .= " WHERE SIZES_CODE = :sc";
+            } else {
+                $sqlGetInfosAd .= " AND SIZES_CODE = :sc";
+            }
+            $arrVariables['sc'] = $size;
+        }
+        if ($state != null) {
+            if (count($arrVariables) == 0) {
+                $sqlGetInfosAd .= " WHERE STATES_CODE = :stc";
+            } else {
+                $sqlGetInfosAd .= " AND STATES_CODE = :stc";
+            }
+            $arrVariables['stc'] = $state;
+        }
+        if ($type != null) {
+            if (count($arrVariables) == 0) {
+                $sqlGetInfosAd .= " WHERE GENDERS_CODE = :gc";
+            } else {
+                $sqlGetInfosAd .= " AND GENDERS_CODE = :gc";
+            }
+            $arrVariables['gc'] = $type;
+        }
+        $sqlGetInfosAd .= " ORDER BY DATE_POSTING DESC";
+        $arrResult = [];
+        $stmt = Database::prepare($sqlGetInfosAd);
+        try {
+            if ($stmt->execute($arrVariables)) {
+                $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                if (count($res) > 0) {
+                    foreach ($res as $r) {
+                        array_push($arrResult, new Ad($r["ID"],  $r["users_NICKNAME"], $r["TITLE"], $r["DESCRIPTION"], $r["GENDERS_CODE"], $r["SIZES_CODE"], $r["BRANDS_CODE"], $r["MODELS_CODE"], $r["STATES_CODE"], $r["PRICE"], $r["DATE_POSTING"]));
+                    }
+                    return $arrResult;
+                } else {
+                    return false;
+                }
+            }
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+    /**
      * Fonction créant une annonce 
      * @var Ad Les informations de l'annonce
+     * @var Tableau d'images encodées en Base 64
      * @return boolean True si OK, False si problème d'insertion
      */
-    public static function createAd($Ad)
+    public static function createAd($Ad, $pictures)
     {
         $sqlCreateUser = "INSERT INTO ads (TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING, users_NICKNAME)
          VALUES (:t,:d, :gc, :sic, :bc, :mc, :stc, :p, NOW(), :un)";
@@ -116,8 +217,86 @@ class AdManager
                 "p" => $Ad->price,
                 "un" => $Ad->nickname
             ))) {
-                if (PictureManager::insertPicturesForAd(Database::lastInsertId(), null)) {
+                if (PictureManager::insertPicturesForAd(Database::lastInsertId(), $pictures)) {
                     return true;
+                }
+            }
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+    /**
+     * Fonction récupérant les annonces selon le filtre appliqué
+     * @var int Le prix minimum du produit
+     * @var int Le prix maximum du produit
+     * @var int La marque du produit
+     * @var int Le modèle du produit
+     * @var int La taille du produit
+     * @var int Le type du produit
+     * @var int L'état de l'annonce
+     * @var int Le pseudo du détenteur de l'annonce
+     * @return Ad[] Le pseudonyme du propriétaire de l'annonce
+     */
+    public static function getAdsFromUserWithFilter($minPrice = null, $maxPrice = null, $brand = null, $model = null, $size = null, $type = null, $state = null, $nickname)
+    {
+        $arrVariables = [];
+        $sqlGetInfosAd = "SELECT ID, TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING, users_NICKNAME FROM ads WHERE users_NICKNAME = :n";
+        $arrVariables["n"] = $nickname;
+        if ($minPrice != null && $maxPrice != null) {
+            $sqlGetInfosAd .= " AND PRICE BETWEEN :pMin AND :pMax";
+
+            $arrVariables['pMin'] = $minPrice;
+            $arrVariables['pMax'] = $maxPrice;
+        } else {
+            if ($minPrice != null) {
+                $sqlGetInfosAd .= " AND PRICE >= :pMin";
+
+                $arrVariables['pMin'] = $minPrice;
+            }
+            if ($maxPrice != null) {
+                $sqlGetInfosAd .= " AND PRICE <= :pMax";
+
+                $arrVariables['pMax'] = $maxPrice;
+            }
+        }
+        if ($brand != null) {
+            $sqlGetInfosAd .= " AND BRANDS_CODE = :bc";
+
+            $arrVariables['bc'] = $brand;
+        }
+        if ($model != null) {
+            $sqlGetInfosAd .= " AND MODELS_CODE = :mc";
+
+            $arrVariables['mc'] = $model;
+        }
+        if ($size != null) {
+            $sqlGetInfosAd .= " AND SIZES_CODE = :sc";
+
+            $arrVariables['sc'] = $size;
+        }
+        if ($state != null) {
+            $sqlGetInfosAd .= " AND STATES_CODE = :stc";
+
+            $arrVariables['stc'] = $state;
+        }
+        if ($type != null) {
+            $sqlGetInfosAd .= " AND GENDERS_CODE = :gc";
+
+            $arrVariables['gc'] = $type;
+        }
+        $sqlGetInfosAd .= " ORDER BY DATE_POSTING DESC";
+        $arrResult = [];
+        $stmt = Database::prepare($sqlGetInfosAd);
+        try {
+            if ($stmt->execute($arrVariables)) {
+                $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                if (count($res) > 0) {
+                    foreach ($res as $r) {
+                        array_push($arrResult, new Ad($r["ID"],  $r["users_NICKNAME"], $r["TITLE"], $r["DESCRIPTION"], $r["GENDERS_CODE"], $r["SIZES_CODE"], $r["BRANDS_CODE"], $r["MODELS_CODE"], $r["STATES_CODE"], $r["PRICE"], $r["DATE_POSTING"]));
+                    }
+                    return $arrResult;
+                } else {
+                    return false;
                 }
             }
         } catch (PDOException $e) {
@@ -151,10 +330,10 @@ class AdManager
             ))) {
                 if ($pictures != null) {
                     if (PictureManager::insertPicturesForAd($Ad->id, $pictures) == false) {
-                            // Un problème, on roll back les changements
-                            Database::rollBack();
-                            return false;
-                        }
+                        // Un problème, on roll back les changements
+                        Database::rollBack();
+                        return false;
+                    }
                 }
                 // C'est tout bon, on 
                 Database::commit();

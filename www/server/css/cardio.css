@@ -443,9 +443,10 @@ section {
 }
 
 .service {
-	width: 100%;
+	width: 350px;
 	height: 450px;
-    margin: 20px 0;
+	margin: 20px 0;
+	margin-left: 40px;
 	text-align: center;
 	border: 1px solid #ddd;
 	-webkit-transition: all 0.3s ease;
@@ -802,7 +803,6 @@ footer .social-footer li:hover a {
 	content: '\f0d7';
 	font-family: 'FontAwesome';
 	display: inline-block;
-	float: right;
 	color: white;
 }
 
@@ -1286,4 +1286,32 @@ option:checked:hover, .displaySelect:focus option:checked:hover {
 }
 .displaySelect:focus > option:checked { 
     background: #ffc446 !important;
+}
+
+.filter{
+	width: 100%;
+	float: right;
+}
+.lbl{
+	color: #ccc8c2;
+	font-size: 15pt;
+}
+.to{
+	margin-left: 80px;
+}
+.filter input{
+	width: 150px;
+	padding: 10px 15px;
+    border: 1px;
+}
+.selectFilter{
+	font-size: 18px;
+	position: relative;
+	left: 0;
+	height: auto;
+	padding: 10px 15px;
+	border: 1px;
+	border-radius: 0;
+	box-shadow: 0;
+	width: 250px;
 }

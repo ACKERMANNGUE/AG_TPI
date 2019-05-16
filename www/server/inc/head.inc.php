@@ -6,5 +6,6 @@ echo '<meta charset="utf-8" />
 <link rel="stylesheet" type="text/css" href="server/css/animate.css">
 <link rel="stylesheet" type="text/css" href="server/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="server/css/cardio.css">
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>';
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="server/Constants/constants.js"></script>';
 ?>

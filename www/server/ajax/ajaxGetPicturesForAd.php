@@ -12,9 +12,9 @@ if (isset($_POST["idAd"])) {
 $response = false;
 
 if ($idAd > 0) {
-    $response = PictureManager::getPicturesForAnAd($idAd);
-    if ($response) {
-        echo '{ "ReturnCode": 0, "ImageInBase64": ' . json_encode($response) . '}';
+    $pics = PictureManager::getPicturesForAnAd($idAd);
+    if ($pics) {
+        echo '{ "ReturnCode": 0, "ImageInBase64": ' . json_encode($pics) . '}';
         exit();
     } else {
         echo '{ "ReturnCode": 2, "Message": "Erreur lors du chargement des images pour l\'annonce n° : ' . $idAd . '"}';

@@ -156,10 +156,9 @@ $states = StateManager::getAllStates();
                                     <div class="form-group">
                                         <label class="col-xs-6 control-label lblForm">Photo (Min. 1)</label>
                                         <div class="col-md-6 inputGroupContainer">
-                                            <div class="col-sm"><input type="file" id="fileSelect" class="form-control picture" name="filesToUpload[]" multiple accept="image/*" /></div>
+                                            <div class="col-sm"><input type="file" id="fileSelect" class="form-control picture" name="filesToUpload" accept="image/*" /></div>
                                             <div class="col-md-8 imgDetails">
-                                                <p class="col-md text-danger text-justify">Attention : Si vous chargez de nouvelles images,
-                                                    celles-ci vont écraser celles présentent actuellement.</p>
+                                                <p class="col-md text-danger text-justify">Attention : Veuillez charger les nouvelles images 1 à 1. Pour annuler les suppressions d'images, rafraîchissez la page</p>
                                                 <div id="imagePreview">
                                                 </div>
                                             </div>
@@ -185,6 +184,9 @@ $states = StateManager::getAllStates();
 <script type="text/javascript">
     $(document).ready(function() {
         displayImagesOnLoad();
+        $(document).on("click", ".btnDelete", function() {
+            $(this).parent().remove();
+        });
         $("#btnSend").click(function() {
             var idAd = <?= $idAd ?>;
             var title = $("#title").val();
@@ -230,7 +232,9 @@ $states = StateManager::getAllStates();
             var arrFiles = [];
             for (var i = 0; i < child.length; i++) {
                 var divWithImage = child[i];
-                var imgBase64 = divWithImage.firstElementChild.currentSrc;
+                var btn = divWithImage.children[0].currentSrc;
+
+                var imgBase64 = divWithImage.children[1].currentSrc;
                 arrFiles.push(imgBase64);
             }
             if (idAd != null && title != null && description != null && brand != null && model != null && gender != null && state != null && price != null && size != null && arrFiles != null) {
@@ -238,7 +242,10 @@ $states = StateManager::getAllStates();
             }
         }); //#end btn click
 
-
+        var imgToDelete;
+        $(".btnDelete").click(function() {
+            
+        });
 
         // On capture le changement de sélection d'images
         $("#fileSelect").change(function() {
@@ -248,11 +255,13 @@ $states = StateManager::getAllStates();
             reader.addEventListener("load", function() {
                 // Ajouter un section pour l'image
                 var el = $("#imagePreview");
-                var div = $('<div class="col-md-4">');
-                el.append(div);
-                var img = $('<img class="imgSmaller" />');
-                img.attr("src", reader.result);
-                div.append(img);
+                        var divImg = $('<div class="col-md-4">');
+                        var divDelete = $('<a class="btn btn-yellow btnDelete">X</a>');
+                        el.append(divImg);
+                        divImg.append(divDelete);
+                        var imgEl = $('<img class="imgSmaller" />');
+                        imgEl.attr("src", reader.result);
+                        divImg.append(imgEl);
 
             }, false);
             if (file) {
@@ -272,7 +281,7 @@ $states = StateManager::getAllStates();
      * @var int le code du type séléctionné
      * @var int le code de l'état de l'annonce
      * @var int le code de la taille
-     * @var int Tableau de string, ce sont les images encodées en base64
+     * @var string[] Tableau de string, ce sont les images encodées en base64
      * @returns string Message de confirmation de modification
      */
     function modifyAd(idAd, title, description, brand, model, gender, state, price, size, pictures) {
@@ -317,11 +326,13 @@ $states = StateManager::getAllStates();
                 if (r != null) {
                     for (i = 0; i < r.length; i++) {
                         var el = $("#imagePreview");
-                        var div = $('<div class="col-md-4">');
-                        el.append(div);
+                        var divImg = $('<div class="col-md-4">');
+                        var divDelete = $('<a class="btn btn-yellow btnDelete" data-index="' + r[i].index + '">X</a>');
+                        el.append(divImg);
+                        divImg.append(divDelete);
                         var imgEl = $('<img class="imgSmaller" />');
                         imgEl.attr("src", r[i].img);
-                        div.append(imgEl);
+                        divImg.append(imgEl);
                     }
                 }
             },
