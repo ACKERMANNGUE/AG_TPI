@@ -14,17 +14,17 @@ include_once __DIR__. '/../database/database.php';
 
 /* Classes utilisées */
 
-include_once __DIR__. '/../Ad.php';
-include_once __DIR__. '/../Brand.php';
-include_once __DIR__. '/../Country.php';
-include_once __DIR__. '/../Gender.php';
-include_once __DIR__. '/../Model.php';
-include_once __DIR__. '/../Role.php';
-include_once __DIR__. '/../Size.php';
-include_once __DIR__. '/../State.php';
-include_once __DIR__. '/../User.php';
-include_once __DIR__. '/../Picture.php';
-include_once __DIR__. '/../Status.php';
+include_once __DIR__. '/../model/Ad.php';
+include_once __DIR__. '/../model/Brand.php';
+include_once __DIR__. '/../model/Country.php';
+include_once __DIR__. '/../model/Gender.php';
+include_once __DIR__. '/../model/Model.php';
+include_once __DIR__. '/../model/Role.php';
+include_once __DIR__. '/../model/Size.php';
+include_once __DIR__. '/../model/State.php';
+include_once __DIR__. '/../model/User.php';
+include_once __DIR__. '/../model/Picture.php';
+include_once __DIR__. '/../model/Status.php';
 
 
 
