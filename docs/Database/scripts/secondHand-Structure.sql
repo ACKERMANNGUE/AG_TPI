@@ -4,7 +4,7 @@
 -- ------------------------------------------------------
 -- Server version	8.0.15
 
-CREATE SCHEMA  "schema_secondhand";
+CREATE SCHEMA  schema_secondhand;
 USE schema_secondhand;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;

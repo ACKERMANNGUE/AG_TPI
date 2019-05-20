@@ -48,7 +48,7 @@ class MailManager
                 ' <head></head>' .
                 ' <body>' .
                 '  <p>' . $mailInfos . '</p></br>' .
-                ' <a href="validation.php?token=' . $token . '&email=' . $emailUser . '><b>Clique ici pour valider ton compte</b></a>' .
+                ' <a href="127.0.0.1/validation.php?token=' . $token . '&email=' . $emailUser . '"><b>Clique ici pour valider ton compte</b></a>' .
                 ' </body>' .
                 '</html>';
             // On assigne le message et on dit de quel type.
@@ -129,7 +129,7 @@ class MailManager
             $message->setFrom(array(EMAIL_BOT_MAILER => "Seconde Main"));
             // A qui on envoie le message
             $message->setTo(array($emailUsersStatusModified));
-            $mailInfos = "Votre compte à changer de status. Vous êtes actuellement considéré comme un utilisateur : <b>" . $status . "</b>";
+            $mailInfos = "Votre compte à changer de status. Vous êtes actuellement considéré comme un utilisateur : <b>" . StatusManager::getStatusName($status) . "</b>";
             // Un petit message html
             // On peut bien évidemment avoir un message texte
             $body =
