@@ -17,11 +17,16 @@ $response = false;
 if ($idStatus > 0 && count($nickname) > 0) {
     $response = UserManager::modifyUsersStatus($nickname, $idStatus);
     if ($response) {
-        echo '{ "ReturnCode": 0, "Message": "Le changement de status s\'est bel et bien déroulé"}';
-        exit();
+        $u = UserManager::getUserByNickname($nickname);
+        if (MailManager::sendMailWhenUsersStatusChange($u->email, $u->status)) {
+            echo '{ "ReturnCode": 0, "Message": "Le changement de status s\'est bel et bien déroulé"}';
+            exit();
+        } else {
+            echo '{ "ReturnCode": 0, "Message": "Erreur lors de l\'envoie de mail"}';
+            exit();
+        }
     } else {
         echo '{ "ReturnCode": 2, "Message": "Erreur lors du changement du status pour l\'utilisateur : ' . $nickname . '"}';
         exit();
     }
 }
-

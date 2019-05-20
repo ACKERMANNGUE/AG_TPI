@@ -4,6 +4,7 @@ body {
 	font-size: 14px;
 	overflow-x: hidden;
 	background-color: #252627;
+	
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -1314,4 +1315,24 @@ option:checked:hover, .displaySelect:focus option:checked:hover {
 	border-radius: 0;
 	box-shadow: 0;
 	width: 250px;
+}
+
+div.controls {
+	margin: 0px 10px;
+	font-size: 14px;
+	font-family: Tahoma;
+	color: #404040;
+	height: 80px;
+}
+div#winVP {
+	position: absolute;
+	height: 100%;
+}
+#frm{
+	width: 280px;
+	height: 250px;
+}
+
+#succes p{
+	color: green;
 }

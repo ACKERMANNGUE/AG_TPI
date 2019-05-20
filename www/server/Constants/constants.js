@@ -3,3 +3,4 @@ const NORECORDS = "Aucune annonce pour les paramètres que vous avez rentré.";
 
 const UNSET_VALUE = "unset";
 
+const WINDOW_ID = "w1";

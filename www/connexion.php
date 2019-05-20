@@ -27,7 +27,6 @@ if (isset($_POST["btnSend"])) {
 <title>Connexion</title>
     <?php include_once "server/inc/head.inc.php"; ?>
 </head>
-</head>
 
 <body>
     <?php

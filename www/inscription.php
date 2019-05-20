@@ -13,8 +13,9 @@ if (isset($_POST["btnSend"])) {
     $pswd = filter_input(INPUT_POST, 'pswd', FILTER_SANITIZE_STRING);
 
     if (count($nickname) > 0 && count($lastname) > 0 &&count($firstname) > 0 &&count($country) > 0 &&count($phone) > 0 &&count($email) > 0 &&count($pswd) > 0){
-        $user = new User($email, $nickname, $firstname, $lastname, $phone, $country, ROLE_USER, $pswd, STATUS_USER_VALIDATED);
+        $user = new User($email, $nickname, $firstname, $lastname, $phone, $country, ROLE_USER, $pswd, STATUS_USER_BLOCKED);
         if(UserManager::createUser($user)){
+            
             header("Location:accueil.php");
         }
     }

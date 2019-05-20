@@ -12,6 +12,10 @@ include_once __DIR__. '/../Constants/constants.php';
 
 include_once __DIR__. '/../database/database.php';
 
+/* Config pour swiftMailer */
+include_once __DIR__. '/../config/mailparam.php';
+include_once __DIR__. '/../swiftmailer5/lib/swift_required.php';
+
 /* Classes utilisées */
 
 include_once __DIR__. '/../model/Ad.php';
@@ -40,5 +44,6 @@ include_once __DIR__. '/../manager/StateManager.php';
 include_once __DIR__. '/../manager/PictureManager.php';
 include_once __DIR__. '/../manager/StatusManager.php';
 include_once __DIR__. '/../manager/SessionManager.php';
+include_once __DIR__. '/../manager/MailManager.php';
 
 ?>

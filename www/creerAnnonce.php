@@ -38,7 +38,7 @@ $states = StateManager::getAllStates();
                                 <div class="form-group">
                                     <label class="col-xs-6 control-label lblForm">Titre</label>
                                     <div class="col-md-6 inputGroupContainer">
-                                        <div class="input-group inputForm"><input id="title" name="title" placeholder="Titre de l'annonce" class="form-control" required="true" value="" type="text"></div>
+                                        <div class="input-group inputForm"><input id="title" name="title" placeholder="Titre de l'annonce" class="form-control" required="true" value="" type="text" maxlength="20"></div>
                                     </div>
                                 </div>
                                 <div class="form-group">

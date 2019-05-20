@@ -9,21 +9,24 @@ $user = UserManager::getUserByNickname($ad->nickname);
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Détail du produit</title>
+    <title>Détail du produit</title>
     <?php include_once "server/inc/head.inc.php"; ?>
 </head>
-<body>
+
+<body onload="doOnLoad();" onunload="doOnUnload();">
     <?php
     include_once "server/inc/nav.inc.php";
     ?>
-    <section id="services" class="section section-padded">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="row">
+    <div id="vp">
+        <section id="services" class="section section-padded">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row">
 
-                        <form class="well form-horizontal detailAd" action="#" method="POST" enctype="multipart/form-data">
+
                             <fieldset id="flds">
                                 <div class="row">
                                     <div class="col-xs-6">
@@ -67,7 +70,7 @@ $user = UserManager::getUserByNickname($ad->nickname);
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 imgDetails">
-                                        <p></p>
+                                        <div id="succes"></div>
                                         <div class="col-md-4">
                                             <?php if (count($pictures) > 1) {
                                                 echo '<img class="imgSmaller" src="' . $pictures[1]->img . '" alt="" />';
@@ -87,15 +90,138 @@ $user = UserManager::getUserByNickname($ad->nickname);
                                     </div>
 
                                 </div>
-                    </div>
-                    </fieldset>
-                    </form>
-                </div>
-            </div>
+                        </div>
+                        </fieldset>
 
-        </div>
-        </div>
+                    </div>
+                </div>
+
+            </div>
+    </div>
     </section>
+    </div>
 </body>
+<script>
+    var email, phone;
+    var myForm, formData;
+    var dhxWins, w1;
+
+    $("#btnBuy").on("click", function() {
+        //Changement d'état
+        oldMode = mode;
+        showWindow(WINDOW_ID, !oldMode);
+        mode = !oldMode;
+    }); //# end onclick
+
+    $(document).ready(function() {
+        mode = false;
+
+    }); //# end document.ready
+    //Fonction chargeant la fenêtre
+    function doOnLoad() {
+        formData = [{
+                type: "settings",
+                position: "label-left",
+                labelWidth: 100,
+                inputWidth: 120
+            },
+            {
+                type: "block",
+                inputWidth: "auto",
+                offsetTop: 12,
+                list: [{
+                        type: "input",
+                        label: "Email : ",
+                        name: "email"
+                    },
+                    {
+                        type: "input",
+                        label: "N° de Téléphone : ",
+                        name: "phone"
+                    },
+                    {
+                        type: "button",
+                        value: "Acheter",
+                        name: "btnBuy",
+                        offsetLeft: 70,
+                        offsetTop: 14
+                    }
+                ]
+            }
+        ];
+        //Création de la fenêtre
+        dhxWins = new dhtmlXWindows();
+        dhxWins.attachViewportTo("vp");
+        w1 = dhxWins.createWindow(WINDOW_ID, 10, 10, 300, 250);
+        w1.setPosition(1220, 550);
+        w1.button("park").disable();
+        w1.button("minmax").disable();
+
+        w1.setText("Achat de l'article");
+        w1.denyResize();
+        //Ajout du formulaire dans la fenêtre
+        myForm = w1.attachForm(formData, true);
+        <?php
+        if (SessionManager::GetNickname() != false) {
+        echo 'myForm.setItemValue("email", "' . UserManager::getUserByNickname(SessionManager::GetNickname())->email . '");';
+        echo 'myForm.setReadonly("email", true);';
+        }
+        ?>
+        myForm.attachEvent("onButtonClick", function() {
+            email = this.getItemValue("email");
+            phone = this.getItemValue("phone");
+            if (email.length > 0) {
+                if (phone.length == 0) {
+                    phone = "";
+                }
+                buyProduct(<?= $idAd ?>, email, phone);
+                //Fermeture de la fenêtre après l'achat
+                showWindow(WINDOW_ID, false);
+            }
+        }); //# end attachEvent
+        showWindow(WINDOW_ID, false);
+    }
+    //Fonction déchargeant la fenêtre
+    function doOnUnload() {
+        if (dhxWins != null && dhxWins.unload != null) {
+            dhxWins.unload();
+            dhxWins = w1 = w2 = w3 = null;
+        }
+    }
+    //Fonction gérant l'affichage de la fenêtre
+    function showWindow(id, mode) {
+        if (mode == true) {
+            dhxWins.window(id).show();
+        } else {
+            dhxWins.window(id).hide();
+        }
+    }
+
+    /**
+    Fonction récupérant les annonces en fonction du filtre appliqué
+    * @param int L'id de l'annonce
+    * @param string l'email de l'utilisateur souhaitant acheter le produit
+    * @param string le N° de téléphone de l'utilisateur souhaitant acheter le produit (non obligatoire)
+     */
+    function buyProduct(idAd, email, phone = null) {
+        $.ajax({
+            type: 'POST',
+            url: 'server/ajax/ajaxBuyProductSendMailToOwnerForProduct.php',
+            dataType: 'json',
+            data: {
+                "idAd": idAd,
+                "emailPurchaser": email,
+                "phone": phone
+            },
+            success: function(returnedData) {
+                var msg = returnedData.Message;
+                $("#succes").append("<p>" + msg + "</p>");
+            },
+            error: function(xhr, tst, err) {
+                console.log(err);
+            }
+        });
+    }
+</script>
 
 </html>

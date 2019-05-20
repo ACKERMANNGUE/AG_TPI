@@ -81,7 +81,8 @@ class UserManager
      */
     public static function createUser($User)
     {
-        $sqlCreateUser = "INSERT INTO users (EMAIL, NICKNAME, FIRSTNAME, LASTNAME,PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE, status_CODE) VALUES (:e,:ni, :fn, :ln, :p, :ph, :ci, :rc, :sc)";
+        $token = UserManager::createToken($User->nickname);
+        $sqlCreateUser = "INSERT INTO users (EMAIL, NICKNAME, FIRSTNAME, LASTNAME,PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE, TOKEN_VALIDATION, TOKEN_EXPIRATION_DATE ,status_CODE) VALUES (:e,:ni, :fn, :ln, :p, :ph, :ci, :rc, :tv, :tev, :sc)";
         $stmt = Database::prepare($sqlCreateUser);
         try {
             if ($stmt->execute(array(
@@ -93,9 +94,13 @@ class UserManager
                 "ph" => $User->phone,
                 "ci" => $User->country,
                 "rc" => $User->role,
+                "tv" => $token,
+                "tev" => date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') + TOKEN_EXPIRATION_TIME, date('Y'))),
                 "sc" => $User->status
             ))) {
-                return true;
+                if (MailManager::sendMailForTokenValidation($token, $User->email)) {
+                    return true;
+                }
             }
         } catch (PDOException $e) {
             return false;
@@ -146,6 +151,15 @@ class UserManager
         }
     }
     /**
+     * Fonction créant un token de validation en comptant le nombre de lettre du pseudonyme de l'utilisateur
+     * @param string Le pseudonyme de l'utilisateur
+     * @return string Le token créé à partir du pseudonyme de l'utilisateur
+     */
+    public static function createToken($nickname)
+    {
+        return md5(uniqid($nickname, true));
+    }
+    /**
      * Fonction connectant un utilisateur
      * @param string L'email de l'utilisateur
      * @param string Le mot de passe de l'utilisateur
@@ -160,6 +174,30 @@ class UserManager
             if ($pwdUser === $pwdHashed) {
                 return true;
             }
+            return false;
+        }
+    }
+    /**
+     * Fonction connectant un utilisateur
+     * @param string Le pesudonyme de l'utilisateur
+     * @return Boolean True si OK, False si un champ est incorrect 
+     */
+    public static function getTokenAndDateExpiration($nickname, &$expdate, &$tkvalid)
+    {
+        $sqlGetToken = "SELECT TOKEN_VALIDATION, TOKEN_EXPIRATION_DATE FROM users WHERE NICKNAME = :n";
+        $stmt = Database::prepare($sqlGetToken);
+        try {
+            if ($stmt->execute(array(
+                "n" => $nickname
+            ))) {
+                $res = $stmt->fetch(PDO::FETCH_ASSOC);
+                if (count($res) > 0) {
+                    $tkvalid = $res["TOKEN_VALIDATION"];
+                    $expdate = $res["TOKEN_EXPIRATION_DATE"];
+                    return true;
+                }
+            }
+        } catch (PDOException $e) {
             return false;
         }
     }
