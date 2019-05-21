@@ -13,15 +13,16 @@ class UserManager
      */
     public static function getUsers()
     {
+        $arrResult = [];
         $sqlGetInfosUser = "SELECT EMAIL, NICKNAME, FIRSTNAME, LASTNAME, PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE, status_CODE FROM users";
         $stmt = Database::prepare($sqlGetInfosUser);
         try {
-            $arrResult = [];
+            
             if ($stmt->execute()) {
                 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
                     foreach ($res as $u) {
-                        array_push($arrResult, new User($u["EMAIL"], $u["NICKNAME"], $u["FIRSTNAME"], $u["LASTNAME"], $u["PHONE"], $u["COUNTRIES_ISOCODE"], $u["ROLES_CODE"], $u["PSWD"], $u["status_CODE"]));
+                        array_push($arrResult, new User($u["EMAIL"], $u["NICKNAME"], $u["FIRSTNAME"], $u["LASTNAME"], $u["PHONE"], $u["COUNTRIES_ISOCODE"],  intval($u["ROLES_CODE"]), $u["PSWD"],  intval($u["status_CODE"])));
                     }
                     return $arrResult;
                 }
@@ -29,6 +30,7 @@ class UserManager
         } catch (PDOException $e) {
             return false;
         }
+        return $arrResult;
     }
     /**
      * Fonction récupérant les informations d'un utilisateur
@@ -45,12 +47,13 @@ class UserManager
             ))) {
                 $res = $stmt->fetch(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
-                    return new User($res["EMAIL"], $res["NICKNAME"], $res["FIRSTNAME"], $res["LASTNAME"], $res["PHONE"], $res["COUNTRIES_ISOCODE"], $res["ROLES_CODE"], $res["PSWD"], $res["status_CODE"]);
+                    return new User($res["EMAIL"], $res["NICKNAME"], $res["FIRSTNAME"], $res["LASTNAME"], $res["PHONE"], $res["COUNTRIES_ISOCODE"],  intval($res["ROLES_CODE"]), $res["PSWD"],  intval($res["status_CODE"]));
                 }
             }
         } catch (PDOException $e) {
             return false;
         }
+        return new User();
     }
     /**
      * Fonction récupérant les informations d'un utilisateur
@@ -67,12 +70,13 @@ class UserManager
             ))) {
                 $res = $stmt->fetch(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
-                    return new User($res["EMAIL"], $res["NICKNAME"], $res["FIRSTNAME"], $res["LASTNAME"], $res["PHONE"], $res["COUNTRIES_ISOCODE"], $res["ROLES_CODE"], $res["PSWD"], $res["status_CODE"]);
+                    return new User($res["EMAIL"], $res["NICKNAME"], $res["FIRSTNAME"], $res["LASTNAME"], $res["PHONE"], $res["COUNTRIES_ISOCODE"], intval($res["ROLES_CODE"]), $res["PSWD"],  intval($res["status_CODE"]));
                 }
             }
         } catch (PDOException $e) {
             return false;
         }
+        return new User();
     }
     /**
      * Fonction créant un utilisateur

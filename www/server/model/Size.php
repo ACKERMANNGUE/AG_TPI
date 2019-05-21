@@ -20,7 +20,7 @@ class Size
     /** @var string Le libellé de la taille */
     public $label;
 
-    public function __construct($paramCode, $paramLabel)
+    public function __construct($paramCode=-1, $paramLabel="")
     {
         $this->code = $paramCode;
         $this->label = $paramLabel;

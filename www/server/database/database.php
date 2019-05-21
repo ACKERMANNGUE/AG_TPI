@@ -12,7 +12,7 @@ class Database {
 
     /**
      * @brief   Class Constructor - Créer une nouvelle connextion à la database si la connexion n'existe pas
-     *          On la met en privé pour que personne puisse créer une nouvelle instance via ' = new KDatabase();'
+     *          On la met en privé pour que personne puisse créer une nouvelle instance via ' = new Database();'
      */
     private function __construct() {
         

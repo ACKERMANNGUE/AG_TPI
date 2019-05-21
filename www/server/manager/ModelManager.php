@@ -34,15 +34,16 @@ class ModelManager
      */
     public static function getAllModels()
     {
+        $arrResult = [];
         $sqlGetAllModels = "SELECT LABEL, CODE FROM models";
         $stmt = Database::prepare($sqlGetAllModels);
         try {
-            $arrResult = [];
+
             if ($stmt->execute()) {
                 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
-                    foreach($res as $s){
-                        array_push($arrResult, new Model($s["CODE"], $s["LABEL"]));
+                    foreach ($res as $s) {
+                        array_push($arrResult, new Model(intval($s["CODE"]), $s["LABEL"]));
                     }
                     return $arrResult;
                 }
@@ -50,5 +51,6 @@ class ModelManager
         } catch (PDOException $e) {
             return false;
         }
+        return $arrResult;
     }
 }

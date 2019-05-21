@@ -37,7 +37,7 @@ class PictureManager
                     "ix" => $cptINDEX,
                     "img" => $src
                 ))) {
-                    /* Rajout d'un car l'index est utilisé pour parcourir le tableau */ 
+                    /* Rajout d'un car l'index est utilisé pour parcourir le tableau */
                     if (count($imgBase64) === $i + 1) {
                         return true;
                     }
@@ -64,7 +64,7 @@ class PictureManager
                 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
                     foreach ($res as $r) {
-                        array_push($arrResult, new Picture($r["ADS_ID"],  $r["INDEX_IMG"], $r["IMAGE"]));
+                        array_push($arrResult, new Picture(intval($r["ADS_ID"]),  intval($r["INDEX_IMG"]), $r["IMAGE"]));
                     }
                 }
                 return $arrResult;
@@ -72,5 +72,6 @@ class PictureManager
         } catch (PDOException $e) {
             return false;
         }
+        return $arrResult;
     }
 }

@@ -34,15 +34,16 @@ class GenderManager
      */
     public static function getAllGenders()
     {
+        $arrResult = [];
         $sqlGetAllGenders = "SELECT LABEL, CODE FROM genders";
         $stmt = Database::prepare($sqlGetAllGenders);
         try {
-            $arrResult = [];
+
             if ($stmt->execute()) {
                 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
-                    foreach($res as $s){
-                        array_push($arrResult, new Gender($s["CODE"], $s["LABEL"]));
+                    foreach ($res as $s) {
+                        array_push($arrResult, new Gender(intval($s["CODE"]), $s["LABEL"]));
                     }
                     return $arrResult;
                 }
@@ -50,5 +51,6 @@ class GenderManager
         } catch (PDOException $e) {
             return false;
         }
+        return $arrResult;
     }
 }

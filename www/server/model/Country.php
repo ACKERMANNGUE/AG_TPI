@@ -8,12 +8,12 @@
 
 class Country
 {
-    /** @var int Le code ISO du pays */
+    /** @var string Le code ISO du pays */
     public $isocode;
     /** @var string Le libellé du pays */
     public $label;
 
-    public function __construct($paramIsocode, $paramLabel)
+    public function __construct($paramIsocode="", $paramLabel="")
     {
         $this->isocode = $paramIsocode;
         $this->label = $paramLabel;

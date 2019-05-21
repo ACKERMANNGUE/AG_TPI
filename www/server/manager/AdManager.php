@@ -15,8 +15,9 @@ class AdManager
     {
         $sqlGetInfosAds = "SELECT ID, users_NICKNAME ,TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING, users_NICKNAME FROM ads ORDER BY DATE_POSTING DESC";
         $stmt = Database::prepare($sqlGetInfosAds);
+        $arrResult = [];
         try {
-            $arrResult = [];
+
             if ($stmt->execute()) {
                 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
@@ -29,6 +30,7 @@ class AdManager
         } catch (PDOException $e) {
             return false;
         }
+        return $arrResult;
     }
     /**
      * Fonction récupérant les informations d'une annnonce
@@ -44,11 +46,11 @@ class AdManager
                 $res = $stmt->fetch(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
                     return new Ad($res["ID"],  $res["users_NICKNAME"], $res["TITLE"], $res["DESCRIPTION"], $res["GENDERS_CODE"], $res["SIZES_CODE"], $res["BRANDS_CODE"], $res["MODELS_CODE"], $res["STATES_CODE"], $res["PRICE"], $res["DATE_POSTING"]);
-                }
+                } 
             }
         } catch (PDOException $e) {
             return false;
-        }
+        }return new Ad();
     }
     /**
      * Fonction récupérant les annonces postées par l'utilisateur connecté 
@@ -73,11 +75,12 @@ class AdManager
         } catch (PDOException $e) {
             return false;
         }
+        return $arrResult;
     }
     /**
      * Fonction récupérant le pseudonyme du propriétaire de l'annonce
      * @var int L'id de l'annonce
-     * @return string Le pseudonyme du propriétaire de l'annonce
+     * @return string Le pseudonyme du propriétaire de l'annonce, False si annonce inexistante
      */
     public static function getAdsUsersNickname($idAd)
     {
@@ -92,7 +95,7 @@ class AdManager
             }
         } catch (PDOException $e) {
             return false;
-        }
+        }return false;
     }
     /**
      * Fonction récupérant les annonces selon le filtre appliqué
@@ -183,7 +186,7 @@ class AdManager
                 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
                     foreach ($res as $r) {
-                        array_push($arrResult, new Ad($r["ID"],  $r["users_NICKNAME"], $r["TITLE"], $r["DESCRIPTION"], $r["GENDERS_CODE"], $r["SIZES_CODE"], $r["BRANDS_CODE"], $r["MODELS_CODE"], $r["STATES_CODE"], $r["PRICE"], $r["DATE_POSTING"]));
+                        array_push($arrResult, new Ad(intval($r["ID"]),  $r["users_NICKNAME"], $r["TITLE"], $r["DESCRIPTION"], intval($r["GENDERS_CODE"]), intval($r["SIZES_CODE"]), intval($r["BRANDS_CODE"]), intval($r["MODELS_CODE"]), intval($r["STATES_CODE"]), floatval($r["PRICE"]), $r["DATE_POSTING"]));
                     }
                     return $arrResult;
                 } else {
@@ -235,10 +238,11 @@ class AdManager
      * @var int Le type du produit
      * @var int L'état de l'annonce
      * @var int Le pseudo du détenteur de l'annonce
-     * @return Ad[] Le pseudonyme du propriétaire de l'annonce
+     * @return Ad[] Le pseudonyme du propriétaire de l'annonce, False si aucun record
      */
     public static function getAdsFromUserWithFilter($minPrice = null, $maxPrice = null, $brand = null, $model = null, $size = null, $type = null, $state = null, $nickname)
     {
+        $arrResult = [];
         $arrVariables = [];
         $sqlGetInfosAd = "SELECT ID, TITLE, DESCRIPTION, GENDERS_CODE, SIZES_CODE, BRANDS_CODE, MODELS_CODE, STATES_CODE, PRICE, DATE_POSTING, users_NICKNAME FROM ads WHERE users_NICKNAME = :n";
         $arrVariables["n"] = $nickname;
@@ -285,23 +289,22 @@ class AdManager
             $arrVariables['gc'] = $type;
         }
         $sqlGetInfosAd .= " ORDER BY DATE_POSTING DESC";
-        $arrResult = [];
+
         $stmt = Database::prepare($sqlGetInfosAd);
         try {
             if ($stmt->execute($arrVariables)) {
                 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
                     foreach ($res as $r) {
-                        array_push($arrResult, new Ad($r["ID"],  $r["users_NICKNAME"], $r["TITLE"], $r["DESCRIPTION"], $r["GENDERS_CODE"], $r["SIZES_CODE"], $r["BRANDS_CODE"], $r["MODELS_CODE"], $r["STATES_CODE"], $r["PRICE"], $r["DATE_POSTING"]));
+                        array_push($arrResult, new Ad(intval($r["ID"]),  $r["users_NICKNAME"], $r["TITLE"], $r["DESCRIPTION"], intval($r["GENDERS_CODE"]), intval($r["SIZES_CODE"]), intval($r["BRANDS_CODE"]), intval($r["MODELS_CODE"]), intval($r["STATES_CODE"]), floatval($r["PRICE"]), $r["DATE_POSTING"]));
                     }
                     return $arrResult;
-                } else {
-                    return false;
-                }
+                } 
             }
         } catch (PDOException $e) {
             return false;
         }
+        return false;
     }
     /**
      * Fonction modifiant une annonce 

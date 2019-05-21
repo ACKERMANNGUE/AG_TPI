@@ -35,15 +35,16 @@ class StateManager
      */
     public static function getAllStates()
     {
+        $arrResult = [];
         $sqlGetAllStates = "SELECT LABEL, CODE FROM states";
         $stmt = Database::prepare($sqlGetAllStates);
         try {
-            $arrResult = [];
+           
             if ($stmt->execute()) {
                 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
                     foreach($res as $s){
-                        array_push($arrResult, new State($s["CODE"], $s["LABEL"]));
+                        array_push($arrResult, new State(intval($s["CODE"]), $s["LABEL"]));
                     }
                     return $arrResult;
                 }
@@ -51,6 +52,7 @@ class StateManager
         } catch (PDOException $e) {
             return false;
         }
+        return $arrResult;
     }
 
 }

@@ -62,7 +62,7 @@ class SessionManager {
     {
         if (isset($_SESSION['ROLE']))
         {
-            return $_SESSION['ROLE'];
+            return intval($_SESSION['ROLE']);
         }
         return false;
     }

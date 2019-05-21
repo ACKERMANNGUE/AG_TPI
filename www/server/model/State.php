@@ -19,7 +19,7 @@ class State
     /** @var string Le libellé de l'état */
     public $label;
 
-    public function __construct($paramCode, $paramLabel)
+    public function __construct($paramCode=-1, $paramLabel="")
     {
         $this->code = $paramCode;
         $this->label = $paramLabel;

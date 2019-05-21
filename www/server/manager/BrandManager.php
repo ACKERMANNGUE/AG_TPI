@@ -42,7 +42,7 @@ class BrandManager
                 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
                     foreach($res as $b){
-                        array_push($arrResult, new Brand($b["CODE"], $b["LABEL"]));
+                        array_push($arrResult, new Brand(intval($b["CODE"]), $b["LABEL"]));
                     }
                     return $arrResult;
                 }

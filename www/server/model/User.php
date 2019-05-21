@@ -33,7 +33,7 @@ class User
       public $status;
 
 
-    public function __construct($paramEmail, $paramNickname, $paramFirstname, $paramLastname, $paramPhone, $paramCountry, $paramRole, $paramPswd, $paramStatus){
+    public function __construct($paramEmail = "", $paramNickname = "", $paramFirstname = "", $paramLastname = "", $paramPhone = "", $paramCountry = -1, $paramRole = -1, $paramPswd = "", $paramStatus = -1){
         $this->email = $paramEmail;
         $this->nickname = $paramNickname;
         $this->firstname = $paramFirstname;

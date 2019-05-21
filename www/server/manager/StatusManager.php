@@ -35,15 +35,16 @@ class StatusManager
      */
     public static function getAllStatus()
     {
+        $arrResult = [];
         $sqlGetAllStatus = "SELECT LABEL, CODE FROM status";
         $stmt = Database::prepare($sqlGetAllStatus);
         try {
-            $arrResult = [];
+            
             if ($stmt->execute()) {
                 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
                     foreach($res as $s){
-                        array_push($arrResult, new Status($s["CODE"], $s["LABEL"]));
+                        array_push($arrResult, new Status(intval($s["CODE"]), $s["LABEL"]));
                     }
                     return $arrResult;
                 }
@@ -51,6 +52,7 @@ class StatusManager
         } catch (PDOException $e) {
             return false;
         }
+        return $arrResult;
     }
 
 }

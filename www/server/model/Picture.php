@@ -15,7 +15,7 @@ class Picture
     public $img;
     
 
-    public function __construct($paramIdAd, $paramIndex, $paramImg)
+    public function __construct($paramIdAd = -1, $paramIndex = -1, $paramImg ="")
     {
         $this->idAd = $paramIdAd;
         $this->index = $paramIndex;

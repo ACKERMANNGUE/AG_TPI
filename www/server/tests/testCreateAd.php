@@ -5,7 +5,7 @@ $user = new User("romain.prtt@eduge.ch", "ROROBocop", "Romain", "Peretti", "0788
 $ad = new Ad(null, $user->nickname, "Annonce de test", "Voici une annonce se créant dans le fichier de test", 1, 1, 1, 1, 1, 15, null);
 
 
-if (AdManager::createAd($ad)) {
+if (AdManager::createAd($ad, null)) {
     echo "Trop bien, ça fonctionne !";
 } else {
     echo "Dommage, c'est pas fonctionnel...";

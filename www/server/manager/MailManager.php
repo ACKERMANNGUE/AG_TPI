@@ -10,7 +10,7 @@ class MailManager
 {
     /**
      * Fonction créant une instance SMTP
-     * @return Instance SMTP 
+     * @return Swift_SmtpTransport SMTP 
      */
     public static function initMailer()
     {

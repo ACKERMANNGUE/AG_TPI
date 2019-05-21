@@ -30,7 +30,7 @@ class Ad
     /** @var Datetime  La date de mise en ligne de l'annonce */
     public $postingDate;
 
-    public function __construct($paramId, $paramNickname, $paramTitle, $paramDescription, $paramGender, $paramSize,$paramBrand, $paramModel, $paramState, $paramPrice, $paramPostingDate)
+    public function __construct($paramId = -1, $paramNickname = "", $paramTitle= "", $paramDescription= "", $paramGender = -1, $paramSize= -1,$paramBrand= -1, $paramModel= -1, $paramState= -1, $paramPrice= -1, $paramPostingDate = null)
     {
         $this->id = $paramId;
         $this->nickname = $paramNickname;

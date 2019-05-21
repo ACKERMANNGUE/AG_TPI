@@ -34,15 +34,16 @@ class SizeManager
      */
     public static function getAllSizes()
     {
+        $arrResult = [];
         $sqlGetAllSizes = "SELECT LABEL, CODE FROM sizes";
         $stmt = Database::prepare($sqlGetAllSizes);
         try {
-            $arrResult = [];
+
             if ($stmt->execute()) {
                 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
-                    foreach($res as $s){
-                        array_push($arrResult, new Size($s["CODE"], $s["LABEL"]));
+                    foreach ($res as $s) {
+                        array_push($arrResult, new Size(intval($s["CODE"]), $s["LABEL"]));
                     }
                     return $arrResult;
                 }
@@ -50,5 +51,6 @@ class SizeManager
         } catch (PDOException $e) {
             return false;
         }
+        return $arrResult;
     }
 }
