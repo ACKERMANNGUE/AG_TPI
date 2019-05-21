@@ -25,7 +25,7 @@ class ModelManager
             }
         } catch (PDOException $e) {
             return false;
-        }
+        }return "";
     }
 
     /**

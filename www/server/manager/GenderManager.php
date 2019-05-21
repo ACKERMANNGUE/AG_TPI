@@ -25,7 +25,7 @@ class GenderManager
             }
         } catch (PDOException $e) {
             return false;
-        }
+        }return "";
     }
 
     /**

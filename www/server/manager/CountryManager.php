@@ -26,6 +26,7 @@ class CountryManager
         } catch (PDOException $e) {
             return false;
         }
+        return "";
     }
 
     /**

@@ -88,7 +88,7 @@ if (isset($_POST["btnSend"])) {
                                 <div class="form-group">
                                     <label class="col-xs-6 control-label lblForm">N° de téléphone</label>
                                     <div class="col-md-6 inputGroupContainer">
-                                        <div class="input-group inputForm"><input name="phone" placeholder="07912376589" class="form-control" required="true" type="text"></div>
+                                        <div class="input-group inputForm"><input name="phone" placeholder="07912376589" class="form-control" required="true" type="text" maxlength="10"></div>
                                     </div>
                                 </div>
                                 <div class="form-group">

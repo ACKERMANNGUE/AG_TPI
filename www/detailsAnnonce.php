@@ -5,6 +5,22 @@ $idAd = filter_input(INPUT_GET, "idAd", FILTER_SANITIZE_NUMBER_INT);
 
 $ad = AdManager::getAdById($idAd);
 $pictures = PictureManager::getPicturesForAnAd($idAd);
+$picCover = "";
+$secondPic = "";
+$thirdPic = "";
+$fourthPic = "";
+if (count($pictures) > 0) {
+    $picCover = $pictures[0]->img;
+    if (count($pictures) > 1) {
+        $secondPic = $pictures[1]->img;
+    }
+    if (count($pictures) > 2) {
+        $thirdPic = $pictures[2]->img;
+    }
+    if (count($pictures) > 3) {
+        $fourthPic = $pictures[3]->img;
+    }
+}
 $user = UserManager::getUserByNickname($ad->nickname);
 ?>
 <!DOCTYPE html>
@@ -30,7 +46,7 @@ $user = UserManager::getUserByNickname($ad->nickname);
                             <fieldset id="flds">
                                 <div class="row">
                                     <div class="col-xs-6">
-                                        <img class="imgDetailsProduct" src=<?= $pictures[0]->img ?> alt="" />
+                                        <img class="imgDetailsProduct" src=<?= $picCover ?> alt="" />
                                     </div>
                                     <div class="col-xs-6">
                                         <div class="col-xs-12 lblForm text-center">
@@ -60,7 +76,9 @@ $user = UserManager::getUserByNickname($ad->nickname);
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12 lblForm">
-                                                <div class="col-xs-12 lblForm"><input id="btnBuy" type="submit" name="btnBuy" value="Acheter !" /></div>
+                                                <?=
+                                                    (intval($ad->state) == STATE_TOSELL) ? '<div class="col-xs-12 lblForm"><input id="btnBuy" type="submit" name="btnBuy" value="Acheter !"/></div>' : "";
+                                                ?>
                                                 <h5 id="dtPosted" class="col-xs-12 text-right">Mis en vente le <?= date("d/m/Y", strtotime($ad->postingDate)) ?></h5>
                                             </div>
 
@@ -73,17 +91,17 @@ $user = UserManager::getUserByNickname($ad->nickname);
                                         <div id="succes"></div>
                                         <div class="col-md-4">
                                             <?php if (count($pictures) > 1) {
-                                                echo '<img class="imgSmaller" src="' . $pictures[1]->img . '" alt="" />';
+                                                echo '<img class="imgSmaller" src="' . $secondPic . '" alt="" />';
                                             } ?>
                                         </div>
                                         <div class="col-md-4">
                                             <?php if (count($pictures) > 2) {
-                                                echo '<img class="imgSmaller" src=' . $pictures[2]->img . ' alt="" />';
+                                                echo '<img class="imgSmaller" src=' . $thirdPic . ' alt="" />';
                                             } ?>
                                         </div>
                                         <div class="col-md-4">
                                             <?php if (count($pictures) > 3) {
-                                                echo '<img class="imgSmaller" src=' . $pictures[3]->img . ' alt="" />';
+                                                echo '<img class="imgSmaller" src=' . $fourthPic . ' alt="" />';
                                             } ?>
                                         </div>
 
@@ -163,8 +181,8 @@ $user = UserManager::getUserByNickname($ad->nickname);
         myForm = w1.attachForm(formData, true);
         <?php
         if (SessionManager::GetNickname() != false) {
-        echo 'myForm.setItemValue("email", "' . UserManager::getUserByNickname(SessionManager::GetNickname())->email . '");';
-        echo 'myForm.setReadonly("email", true);';
+            echo 'myForm.setItemValue("email", "' . UserManager::getUserByNickname(SessionManager::GetNickname())->email . '");';
+            echo 'myForm.setReadonly("email", true);';
         }
         ?>
         myForm.attachEvent("onButtonClick", function() {

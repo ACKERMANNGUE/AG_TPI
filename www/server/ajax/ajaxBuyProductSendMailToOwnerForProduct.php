@@ -24,11 +24,14 @@ $response = false;
 
 if ($idAd != 0 && count($emailPurchaser) > 0) {
     $userWhoSell = UserManager::getUserByNickname(AdManager::getAdsUsersNickname($idAd));
-    if (MailManager::sendMailForAPurchase($emailPurchaser, $phone, $userWhoSell->email, AdManager::getAdById($idAd)->title)) {
-        echo '{ "ReturnCode": 0, "Message": "La demande d\'achat à bien été envoyé !"}';
-        exit();
-    } else {
-        echo '{ "ReturnCode": 2, "Message": "Erreur lors de l\'achat de l\'annonce ayant pour titre : ' . AdManager::getAdById($idAd)->title . '"}';
-        exit();
+    $ad = AdManager::getAdById($idAd);
+    $ad->state = STATE_PENDING_SOLD;
+    if (AdManager::modifyAdsState($ad)) {
+        if (MailManager::sendMailForAPurchase($emailPurchaser, $phone, $userWhoSell->email, $ad->title)) {
+            echo '{ "ReturnCode": 0, "Message": "La demande d\'achat à bien été envoyé !"}';
+            exit();
+        }
     }
+    echo '{ "ReturnCode": 2, "Message": "Erreur lors de l\'achat de l\'annonce ayant pour titre : ' . $ad->title . '"}';
+    exit();
 }

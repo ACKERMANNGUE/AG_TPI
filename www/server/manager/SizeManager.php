@@ -26,6 +26,7 @@ class SizeManager
         } catch (PDOException $e) {
             return false;
         }
+        return "";
     }
 
     /**

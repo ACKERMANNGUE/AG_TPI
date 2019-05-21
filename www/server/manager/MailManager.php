@@ -48,7 +48,7 @@ class MailManager
                 ' <head></head>' .
                 ' <body>' .
                 '  <p>' . $mailInfos . '</p></br>' .
-                ' <a href="127.0.0.1/validation.php?token=' . $token . '&email=' . $emailUser . '"><b>Clique ici pour valider ton compte</b></a>' .
+                ' <a href="http://127.0.0.1/validation.php?token=' . $token . '&email=' . $emailUser . '"><b>Clique ici pour valider ton compte</b></a>' .
                 ' </body>' .
                 '</html>';
             // On assigne le message et on dit de quel type.
@@ -130,6 +130,46 @@ class MailManager
             // A qui on envoie le message
             $message->setTo(array($emailUsersStatusModified));
             $mailInfos = "Votre compte à changer de status. Vous êtes actuellement considéré comme un utilisateur : <b>" . StatusManager::getStatusName($status) . "</b>";
+            // Un petit message html
+            // On peut bien évidemment avoir un message texte
+            $body =
+                '<html>' .
+                ' <head></head>' .
+                ' <body>' .
+                '  <p>' . $mailInfos . '</p></br>' .
+                ' </body>' .
+                '</html>';
+            // On assigne le message et on dit de quel type.
+            $message->setBody($body, 'text/html');
+            //envoie du mail
+            if ($mailer->send($message)) {
+                return true;
+            }
+        } catch (Swift_TransportException $e) {
+            echo "Problème d'envoi de message: " . $e->getMessage();
+            return false;
+        }
+    }/**
+     * Fonction envoyant un mail lors du changement de l'état d'une annonce
+     * @var string L'email de l'utilisateur
+     * @var int L'id de l'état
+     * @return boolean True si ok, False si problème d'envois
+     */
+    public static function sendMailWhenUsersAdsStateChange($emailOwnersAd, $state, $adTitle)
+    {
+        $transport = MailManager::initMailer();
+        try {
+            // On crée un nouvelle instance de mail en utilisant le transport créé précédemment
+            $mailer = Swift_Mailer::newInstance($transport);
+            // On crée un nouveau message
+            $message = Swift_Message::newInstance();
+            // Le sujet du message
+            $message->setSubject("Changement d'état pour une de vos annonces postée");
+            // Qui envoie le message 
+            $message->setFrom(array(EMAIL_BOT_MAILER => "Seconde Main"));
+            // A qui on envoie le message
+            $message->setTo(array($emailOwnersAd));
+            $mailInfos = "Votre annonce prénommé : <b>" . $adTitle . "</b> a changé d'état en une annonce <b>" . StateManager::getStatesName(intval($state)) . "</b>";
             // Un petit message html
             // On peut bien évidemment avoir un message texte
             $body =

@@ -34,21 +34,25 @@ if (isset($_GET["state"]) && $_GET["state"] != "" && $_GET["state"] != "unset") 
     $state = filter_input(INPUT_GET, 'state', FILTER_SANITIZE_NUMBER_INT);
 }
 $arrResult = [];
+$states = StateManager::getAllStates();
 $ads = AdManager::getAdsWithFilter($minPrice, $maxPrice, $brand, $model, $size, $type, $state);
 if ($ads != false) {
+
     foreach ($ads as $ad) {
-        $informations = array("id" => 0, "title" => "", "brand" => "", "price" => 0, "picture" => "");
+        $informations = array("id" => 0, "title" => "", "nickname" => "", "brand" => "", "price" => 0, "state" => 0, "picture" => "");
         $informations["id"] =  $ad->id;
+        $informations["nickname"] = $ad->nickname;
         $informations["title"] = $ad->title;
         $informations["brand"] = BrandManager::getBrandsName($ad->brand);
         $informations["price"] = $ad->price;
+        $informations["state"] = $ad->state;
         $pictures = PictureManager::getPicturesForAnAd($ad->id);
         $informations["picture"] = $pictures[0]->img;
         array_push($arrResult, $informations);
     }
 }
 if ($arrResult != null) {
-    echo '{ "ReturnCode": 0, "Ads": ' . json_encode($arrResult) . '}';
+    echo '{ "ReturnCode": 0, "Ads": ' . json_encode($arrResult) . ', "States":' . json_encode($states) . '}';
     exit();
 } else {
     echo '{ "ReturnCode": 2, "Message": "Erreur lors du chargement des annonces"}';

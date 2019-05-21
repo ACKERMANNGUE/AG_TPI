@@ -17,7 +17,7 @@ class UserManager
         $sqlGetInfosUser = "SELECT EMAIL, NICKNAME, FIRSTNAME, LASTNAME, PSWD, PHONE, COUNTRIES_ISOCODE, ROLES_CODE, status_CODE FROM users";
         $stmt = Database::prepare($sqlGetInfosUser);
         try {
-            
+
             if ($stmt->execute()) {
                 $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 if (count($res) > 0) {
@@ -176,7 +176,9 @@ class UserManager
             $pwdUser = $userInfo->pswd;
             $pwdHashed = sha1($pwd);
             if ($pwdUser === $pwdHashed) {
-                return true;
+                if ($userInfo->status == STATUS_USER_VALIDATED) {
+                    return true;
+                }
             }
             return false;
         }

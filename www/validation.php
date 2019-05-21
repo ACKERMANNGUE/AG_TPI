@@ -1,24 +1,20 @@
 <?php
 include_once 'server/inc/inc.all.php';
-
-if (isset($_POST["btnSend"])) {
-    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-    $pswd = filter_input(INPUT_POST, 'pwd', FILTER_SANITIZE_STRING);
-
-
-    /* Disparaîtra, en attendant la connexion en AJAX */
-    if (UserManager::Connection($email, $pswd)) {
-        $user = UserManager::getUserByEmail($email);
-        SessionManager::SetNickname($user->nickname);
-        SessionManager::SetRole(intval($user->role));
-            header("Location:accueil.php");
-    } else {
-
-        echo '<script>alert("Attention ! Un problème est survenu, il se peut que l\'email et/ou le mot de passe soit incorrect ou il se peut que votre compte ne soit pas encore activé ou bloqué. Allez vérifier votre boîte mail.");</script>';
-    }
+$email = "";
+$token = "";
+if (isset($_GET["token"]) && isset($_GET["email"])) {
+    $email = filter_input(INPUT_GET, 'email', FILTER_SANITIZE_EMAIL);
+    $token = filter_input(INPUT_GET, "token", FILTER_SANITIZE_STRING);
 }
-
-
+$nickname = UserManager::getUserByEmail($email)->nickname;
+if (UserManager::getTokenAndDateExpiration($nickname, $dateExpiration, $tokenUser))
+$dateExpiration = strtotime($dateExpiration);
+if ($tokenUser === $token && $dateExpiration > strtotime("now")) {
+    if(UserManager::modifyUsersStatus($nickname, STATUS_USER_VALIDATED)){
+        header("Location: accueil.php");
+    }
+    
+}
 ?>
 <!DOCTYPE html>
 <html>

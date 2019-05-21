@@ -1256,13 +1256,20 @@ footer .social-footer li:hover a {
 }
 
 .servicesGestion{
-	width: 100%;
+	width: 400px;
 	height: 550px;
-    margin: 20px 0;
+    margin: 10px 0;
 	text-align: center;
 	border: 1px solid #ddd;
 	-webkit-transition: all 0.3s ease;
 	transition: all 0.3s ease;
+}
+.servicesGestion:hover{
+	border: 1px solid #ffb100;
+}
+.brandAndPrice{
+	color: rgb(201, 201, 201);
+	font-size: 18pt;
 }
 
 .btnGestion{

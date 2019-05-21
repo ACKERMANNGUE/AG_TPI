@@ -27,6 +27,7 @@ class StateManager
         } catch (PDOException $e) {
             return false;
         }
+        return "";
     }
 
     /**

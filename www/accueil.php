@@ -1,6 +1,7 @@
 <?php
 include_once 'server/inc/inc.all.php';
 
+
 $ads = AdManager::getAds();
 $brands = BrandManager::getAllBrands();
 $countries = CountryManager::getAllCountries();
@@ -104,14 +105,14 @@ $states = StateManager::getAllStates();
 			<p id="NoRecordSet"></p>
 			<div id="displayAd">
 				<div class="row services">
-					
+
 				</div>
 			</div>
 	</section>
 </body>
 <script>
 	$(document).ready(function() {
-		getAds(UNSET_VALUE, UNSET_VALUE, UNSET_VALUE, UNSET_VALUE, UNSET_VALUE, UNSET_VALUE, UNSET_VALUE);
+		getAds(UNSET_VALUE, UNSET_VALUE, UNSET_VALUE, UNSET_VALUE, UNSET_VALUE, UNSET_VALUE, AD_TOSELL);
 		var minPrice = null;
 		var maxPrice = null;
 		var brand = null;
@@ -176,7 +177,7 @@ $states = StateManager::getAllStates();
 	* @param Array Les données devant être affichées
 	 */
 	function displayAds(ads) {
-		$(".col-md-3").remove();
+		$(".ads").remove();
 		if (ads == null) {
 			$("#NoRecordSet").text(NORECORDS);
 		} else {
@@ -184,7 +185,7 @@ $states = StateManager::getAllStates();
 			for (var i = 0; i < ads.length; i++) {
 				var el = $("#services");
 
-				var divAd = $('<div class="col-md-3">');
+				var divAd = $('<div class="col-md-3 ads">');
 				var divAdService = $('<div class="service">');
 
 				var detailsAd = $('<a>').attr("href", 'detailsAnnonce.php?idAd=' + ads[i].id);
@@ -208,6 +209,8 @@ $states = StateManager::getAllStates();
 				divAdService.append(descriptionRow);
 				descriptionRow.append(spanBrand);
 				descriptionRow.append(spanPrice);
+
+
 			}
 		}
 	}
@@ -236,8 +239,8 @@ $states = StateManager::getAllStates();
 				"state": state
 			},
 			success: function(returnedData) {
-				var ads = returnedData;
-				displayAds(ads.Ads);
+				var ads = returnedData.Ads;
+				displayAds(ads);
 
 			},
 			error: function(xhr, tst, err) {

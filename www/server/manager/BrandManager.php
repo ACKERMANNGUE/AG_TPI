@@ -26,6 +26,7 @@ class BrandManager
         } catch (PDOException $e) {
             return false;
         }
+        return "";
     }
 
     /**
