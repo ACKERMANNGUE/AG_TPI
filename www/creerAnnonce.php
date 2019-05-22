@@ -149,7 +149,7 @@ $states = StateManager::getAllStates();
                                     </div>
                                     <div class="form-group grpBtnSend">
                                         <div class="col-md-6 inputGroupContainer">
-                                            <div class="input-group inputForm"><button type="button" id="btnSend" class="btn btn-yellow">Cr mon annonce !</button></div>
+                                            <div class="input-group inputForm"><button type="button" id="btnSend" class="btn btn-yellow">Créer mon annonce !</button></div>
                                         </div>
                                     </div>
                             </fieldset>
@@ -279,7 +279,9 @@ $states = StateManager::getAllStates();
             },
             success: function(returnedData) {
                 var res = returnedData;
-
+                if(parseInt(res.ReturnCode) == 0){
+                    window.location.href = "mesAnnonces.php"
+                }
             },
             error: function(xhr, tst, err) {
                 console.log(err);

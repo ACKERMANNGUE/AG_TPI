@@ -15,7 +15,7 @@ $idAd = filter_input(INPUT_GET, "idAd", FILTER_SANITIZE_NUMBER_INT);
 
 $ad = AdManager::getAdById($idAd);
 $pictures = PictureManager::getPicturesForAnAd($idAd);
-$user = AdManager::getAdsUsersNickname($idAd);
+$userNickname = AdManager::getAdsUsersNickname($idAd);
 
 $brands = BrandManager::getAllBrands();
 $countries = CountryManager::getAllCountries();
@@ -24,7 +24,7 @@ $models = ModelManager::getAllModels();
 $sizes = SizeManager::getAllSizes();
 $states = StateManager::getAllStates();
 
-if (SessionManager::GetNickname() != $user->nickname) {
+if (SessionManager::GetNickname() != $userNickname) {
     header("location:accueil.php");
 }
 ?>
@@ -314,7 +314,9 @@ if (SessionManager::GetNickname() != $user->nickname) {
             },
             success: function(returnedData) {
                 var res = returnedData;
-
+                if(parseInt(res.ReturnCode) == 0){
+                    window.location.href = "mesAnnonces.php"
+                }
             },
             error: function(xhr, tst, err) {
                 console.log(err);
