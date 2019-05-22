@@ -1,10 +1,16 @@
 <?php
 /**
+ * Travail TPI Mai 2019
+ * @copyright Gawen 2019 - CFPT-Informatique
+ * @author Ackermann Gawen gawen.ackrm@edge.ch
+ * @version 1.0 
+ */
+
+ /**
  * @author Ackermann Gawen
  * Cette classe contient les informations
  * sur une Annonce
  */
-
 class Ad
 {
     /** @var int L'id de l'annonce */

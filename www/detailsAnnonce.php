@@ -1,4 +1,10 @@
 <?php
+/**
+ * Travail TPI Mai 2019
+ * @copyright Gawen 2019 - CFPT-Informatique
+ * @author Ackermann Gawen gawen.ackrm@edge.ch
+ * @version 1.0 
+ */
 include_once 'server/inc/inc.all.php';
 
 $idAd = filter_input(INPUT_GET, "idAd", FILTER_SANITIZE_NUMBER_INT);
@@ -22,6 +28,7 @@ if (count($pictures) > 0) {
     }
 }
 $user = UserManager::getUserByNickname($ad->nickname);
+
 ?>
 <!DOCTYPE html>
 <html>

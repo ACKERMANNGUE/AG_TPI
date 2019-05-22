@@ -1,4 +1,10 @@
 <?php
+/**
+ * Travail TPI Mai 2019
+ * @copyright Gawen 2019 - CFPT-Informatique
+ * @author Ackermann Gawen gawen.ackrm@edge.ch
+ * @version 1.0 
+ */
 include_once 'server/inc/inc.all.php';
 
 if (SessionManager::GetRole() === false) {
@@ -9,6 +15,7 @@ $idAd = filter_input(INPUT_GET, "idAd", FILTER_SANITIZE_NUMBER_INT);
 
 $ad = AdManager::getAdById($idAd);
 $pictures = PictureManager::getPicturesForAnAd($idAd);
+$user = AdManager::getAdsUsersNickname($idAd);
 
 $brands = BrandManager::getAllBrands();
 $countries = CountryManager::getAllCountries();
@@ -17,6 +24,9 @@ $models = ModelManager::getAllModels();
 $sizes = SizeManager::getAllSizes();
 $states = StateManager::getAllStates();
 
+if (SessionManager::GetNickname() != $user->nickname) {
+    header("location:accueil.php");
+}
 ?>
 <!DOCTYPE html>
 <html>

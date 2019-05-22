@@ -1,4 +1,10 @@
 <?php
+/**
+ * Travail TPI Mai 2019
+ * @copyright Gawen 2019 - CFPT-Informatique
+ * @author Ackermann Gawen gawen.ackrm@edge.ch
+ * @version 1.0 
+ */
 include_once 'server/inc/inc.all.php';
 
 if (SessionManager::GetRole() != ROLE_ADMIN) {
@@ -54,7 +60,7 @@ $states = StateManager::getAllStates();
                 <div class="col-md-4">
                     <div class="input-group">
                         <select class="selectFilter" name="model" id="model">
-                            <option value="unset" selected="selected">Choisissez une marque</option>
+                            <option value="unset" selected="selected">Choisissez un modèle</option>
                             <?php foreach ($models as $m) {
                                 echo '<option value="' . $m->code . '">
                                                         ' . $m->label . '</option>';
@@ -67,7 +73,7 @@ $states = StateManager::getAllStates();
                 <div class="col-md-4">
                     <div class="input-group">
                         <select class="selectFilter" name="size" id="size">
-                            <option value="unset" selected="selected">Choisissez une marque</option>
+                            <option value="unset" selected="selected">Choisissez une taille</option>
                             <?php foreach ($sizes as $s) {
                                 echo '<option value="' . $s->code . '">
                                                         ' . $s->label . '</option>';
@@ -82,7 +88,7 @@ $states = StateManager::getAllStates();
                 <div class="col-md-4">
                     <div class="input-group">
                         <select class="selectFilter" name="type" id="type">
-                            <option value="unset" selected="selected">Choisissez une marque</option>
+                            <option value="unset" selected="selected">Choisissez un genre</option>
                             <?php foreach ($genders as $g) {
                                 echo '<option value="' . $g->code . '">
                                                         ' . $g->label . '</option>';
@@ -96,7 +102,7 @@ $states = StateManager::getAllStates();
                 <div class="col-md-4">
                     <div class="input-group">
                         <select class="selectFilter" name="state" id="state">
-                            <option value="unset" selected="selected">Choisissez une marque</option>
+                            <option value="unset" selected="selected">Choisissez un état</option>
                             <?php foreach ($states as $s) {
                                 echo '<option value="' . $s->code . '">
                                                         ' . $s->label . '</option>';

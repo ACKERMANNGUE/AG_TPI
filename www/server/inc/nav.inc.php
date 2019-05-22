@@ -1,5 +1,10 @@
 <?php 
-
+/**
+ * Travail TPI Mai 2019
+ * @copyright Gawen 2019 - CFPT-Informatique
+ * @author Ackermann Gawen gawen.ackrm@edge.ch
+ * @version 1.0 
+ */
 if(isset($_SESSION["ROLE"]) && intval($_SESSION["ROLE"]) == ROLE_USER){
     echo '<nav class="navbar navbar-fixed-top">
     <div class="container">

@@ -1,10 +1,16 @@
 <?php
 /**
+ * Travail TPI Mai 2019
+ * @copyright Gawen 2019 - CFPT-Informatique
+ * @author Ackermann Gawen gawen.ackrm@edge.ch
+ * @version 1.0 
+ */
+
+/**
  * @author Ackermann Gawen
  * Cette classe contient les fonctions
  * récupérant les données concernant les différents modèles d'habits
  */
-
 class ModelManager
 {
     /**
