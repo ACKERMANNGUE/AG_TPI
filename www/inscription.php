@@ -18,10 +18,10 @@ if (isset($_POST["btnSend"])) {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $pswd = filter_input(INPUT_POST, 'pswd', FILTER_SANITIZE_STRING);
 
-    if (count($nickname) > 0 && count($lastname) > 0 &&count($firstname) > 0 &&count($country) > 0 &&count($phone) > 0 &&count($email) > 0 &&count($pswd) > 0){
+    if (count($nickname) > 0 && count($lastname) > 0 && count($firstname) > 0 && count($country) > 0 && count($phone) > 0 && count($email) > 0 && count($pswd) > 0) {
         $user = new User($email, $nickname, $firstname, $lastname, $phone, $country, ROLE_USER, $pswd, STATUS_USER_BLOCKED);
-        if(UserManager::createUser($user)){
-            
+        if (UserManager::createUser($user)) {
+
             header("Location:accueil.php");
         }
     }
@@ -124,5 +124,12 @@ if (isset($_POST["btnSend"])) {
         </div>
     </section>
 </body>
+<script>
+    $(document).ready(function() {
+        $("#btnHelp").click(function() {
+            window.open("help.php", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=1200,height=650");
+        });
+    });
+</script>
 
 </html>

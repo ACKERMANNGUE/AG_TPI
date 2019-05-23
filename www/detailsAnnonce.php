@@ -141,6 +141,10 @@ $user = UserManager::getUserByNickname($ad->nickname);
     $(document).ready(function() {
         mode = false;
 
+        $("#btnHelp").click(function() {
+            window.open("help.php", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=1200,height=650");
+        });
+
     }); //# end document.ready
     //Fonction chargeant la fenêtre
     function doOnLoad() {

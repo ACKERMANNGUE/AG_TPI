@@ -14,6 +14,7 @@ if(isset($_SESSION["ROLE"]) && intval($_SESSION["ROLE"]) == ROLE_USER){
                 <li><a href="creerAnnonce.php">Créer une annonce</a></li>
                 <li><a href="mesAnnonces.php">Mes annonces</a></li>
                 <li><a href="deconnexion.php" class="btn btn-yellow">Déconnexion</a></li>
+                <li><a id="btnHelp"><span class="glyphicon glyphicon-question-sign"></span></a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div>
@@ -30,6 +31,7 @@ if(isset($_SESSION["ROLE"]) && intval($_SESSION["ROLE"]) == ROLE_ADMIN){
                 <li><a href="gestionUtilisateurs.php">Gérer les utilisateurs</a></li>
                 <li><a href="gestionAnnonces.php">Gérer les annonces</a></li>
                 <li><a href="deconnexion.php" class="btn btn-yellow">Déconnexion</a></li>
+                <li><a id="btnHelp"><span class="glyphicon glyphicon-question-sign"></span></a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div>
@@ -44,11 +46,10 @@ if(!isset($_SESSION["ROLE"])){
             <ul class="nav navbar-nav navbar-right main-nav">
                 <li><a href="accueil.php">Accueil</a></li>
                 <li><a href="connexion.php" class="btn btn-yellow">Connexion</a></li>
+                <li><a id="btnHelp"><span class="glyphicon glyphicon-question-sign"></span></a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div>
     <!-- /.container-fluid -->
 </nav>';
 }
-
-?>

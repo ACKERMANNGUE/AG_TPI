@@ -17,7 +17,7 @@ if (isset($_POST["btnSend"])) {
         $user = UserManager::getUserByEmail($email);
         SessionManager::SetNickname($user->nickname);
         SessionManager::SetRole(intval($user->role));
-            header("Location:accueil.php");
+        header("Location:accueil.php");
     } else {
 
         echo '<script>alert("Attention ! Un problème est survenu, il se peut que l\'email et/ou le mot de passe soit incorrect ou il se peut que votre compte ne soit pas encore activé ou bloqué. Allez vérifier votre boîte mail.");</script>';
@@ -30,7 +30,7 @@ if (isset($_POST["btnSend"])) {
 <html>
 
 <head>
-<title>Connexion</title>
+    <title>Connexion</title>
     <?php include_once "server/inc/head.inc.php"; ?>
 </head>
 
@@ -77,5 +77,12 @@ if (isset($_POST["btnSend"])) {
         </div>
     </section>
 </body>
+<script>
+    $(document).ready(function() {
+        $("#btnHelp").click(function() {
+            window.open("help.php", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=1200,height=650");
+        });
+    });
+</script>
 
 </html>

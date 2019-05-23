@@ -1343,3 +1343,32 @@ div#winVP {
 #succes p{
 	color: green;
 }
+.imgUserManul{
+	width: 1080px;
+	height: 620px;
+}
+.headerUserManual{
+	font-size: 22pt;
+	color: white;
+}
+.descUserManual{
+	text-justify: auto;
+	color: rgb(196, 196, 196);
+}
+.imgButtonUserManual{
+	width: 100px;
+	height : 50px;
+}
+.linksUserManual{
+	color: rgb(196, 196, 196);
+	width: 100%;
+}
+.linksUserManual:hover{
+	transition: all 0.3s ease;
+	color:#ffc53c;
+	height: 50px;
+}
+.titleUserManual{
+	border-bottom: #f1bd12 solid 1px;
+	margin-top: 10px;
+}

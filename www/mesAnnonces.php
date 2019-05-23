@@ -122,6 +122,13 @@ $states = StateManager::getAllStates();
 </body>
 <script>
     $(document).ready(function() {
+
+        $("#btnHelp").click(function() {
+            window.open("help.php", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=1200,height=650");
+        });
+    });
+
+
         getAdsFromUser(UNSET_VALUE, UNSET_VALUE, UNSET_VALUE, UNSET_VALUE, UNSET_VALUE, UNSET_VALUE, UNSET_VALUE,  <?= '"' . SessionManager::GetNickname() . '"' ?>);
         var minPrice = null;
         var maxPrice = null;
