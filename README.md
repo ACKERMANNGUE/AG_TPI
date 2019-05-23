@@ -73,3 +73,12 @@ Répertorie les différentes images de maquettage de l'application
 
 ### /docs/Analysis/Database
 Répertorie les différents sous-dossier pour l'importation du schema de base de données ainsi que les scripts pour remplir les tables
+
+```
+Mise en place de l'application
+```
+### Scripts a utilisé dans l'ordre ci dessous
+
+1. createUserDB.sql 
+2. secondHand-Structure.sql
+3. secondHand-Datas.sql
