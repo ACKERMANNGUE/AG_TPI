@@ -37,9 +37,9 @@ $states = StateManager::getAllStates();
         <div class="container">
             <div class="row filter">
                 <label class="col-md-2 lbl">Prix allant de</label>
-                <input type="text" id="priceMin" class="input col-md-2" placeholder="Valeur Minimum" />
-                <label class="col-md-1 lbl">à</label>
-                <input type="text" id="priceMax" class="input col-md-1" placeholder="Valeur Maximum" />
+                <input type="number" id="priceMin" class="input col-md-2" placeholder="Valeur Minimum" min="0"/>
+				<label class="col-md-1 lbl">à</label>
+				<input type="number" id="priceMax" class="input col-md-1" placeholder="Valeur Maximum" />
                 <label class="col-md-1 control-label lbl to">Marque</label>
                 <div class="col-md-4">
                     <div class="input-group">

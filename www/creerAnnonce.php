@@ -132,7 +132,7 @@ $states = StateManager::getAllStates();
                                     <div class="form-group">
                                         <label class="col-xs-6 control-label lblForm">Prix</label>
                                         <div class="col-md-6 inputGroupContainer">
-                                            <div class="input-group inputForm"><input id="price" name="price" placeholder="0" class="form-control" required="true" value="" type="text"></div>
+                                            <div class="input-group inputForm"><input id="price" name="price" placeholder="0" class="form-control" required="true" value="" type="number"></div>
                                         </div>
                                     </div>
                                     <!--  Changer pour accepter les images !-->
