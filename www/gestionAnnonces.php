@@ -164,8 +164,7 @@ $states = StateManager::getAllStates();
             state = $(this).val();
             getAds(minPrice, maxPrice, brand, model, size, gender, state);
         });
-    });
-
+    }); //#end document ready
 
     function DisplayDropdown(id) {
         var select = $("#select" + id).parent();

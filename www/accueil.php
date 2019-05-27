@@ -163,7 +163,7 @@ $states = StateManager::getAllStates();
 
 
 
-	});
+	}); //#end document ready
 	/**
 	 * Fonction récupérant les annonces avec leur image de couverture
 	 */

@@ -197,7 +197,6 @@ if (SessionManager::GetNickname() != $userNickname) {
         $("#btnHelp").click(function() {
             window.open("help.php", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=1200,height=650");
         });
-    });
 
         displayImagesOnLoad();
         $(document).on("click", ".btnDelete", function() {
@@ -260,7 +259,7 @@ if (SessionManager::GetNickname() != $userNickname) {
 
         var imgToDelete;
         $(".btnDelete").click(function() {
-            
+
         });
 
         // On capture le changement de sélection d'images
@@ -271,13 +270,13 @@ if (SessionManager::GetNickname() != $userNickname) {
             reader.addEventListener("load", function() {
                 // Ajouter un section pour l'image
                 var el = $("#imagePreview");
-                        var divImg = $('<div class="col-md-4">');
-                        var divDelete = $('<a class="btn btn-yellow btnDelete">X</a>');
-                        el.append(divImg);
-                        divImg.append(divDelete);
-                        var imgEl = $('<img class="imgSmaller" />');
-                        imgEl.attr("src", reader.result);
-                        divImg.append(imgEl);
+                var divImg = $('<div class="col-md-4">');
+                var divDelete = $('<a class="btn btn-yellow btnDelete">X</a>');
+                el.append(divImg);
+                divImg.append(divDelete);
+                var imgEl = $('<img class="imgSmaller" />');
+                imgEl.attr("src", reader.result);
+                divImg.append(imgEl);
 
             }, false);
             if (file) {
@@ -320,7 +319,7 @@ if (SessionManager::GetNickname() != $userNickname) {
             },
             success: function(returnedData) {
                 var res = returnedData;
-                if(parseInt(res.ReturnCode) == 0){
+                if (parseInt(res.ReturnCode) == 0) {
                     window.location.href = "mesAnnonces.php"
                 }
             },
